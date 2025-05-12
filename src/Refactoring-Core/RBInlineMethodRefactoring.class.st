@@ -106,7 +106,15 @@ RBInlineMethodRefactoring >> breakingChangePreconditions [
 					    , String cr , 'You can break you hooks with this inline.'
 						    expandMacrosWith: self classOfTheMethodToInline
 						    with: self inlineSelector) ] ].
-		   true ]) }
+		   true ]).
+		(RBCondition withBlock: [
+			| statements |
+			statements := inlineParseTree body statements.
+			(statements size > 1 and: [ sourceMessage isEvaluatedFirst not ]) ifTrue: [
+				self refactoringWarning:
+					'To inline this method, we need to move some of its statements before the original message send.<n>This could change the order of execution, which can change the behavior.<n>Do you want to proceed?'
+						expandMacros ].
+			true ]) }
 ]
 
 { #category : 'accessing' }
@@ -234,10 +242,6 @@ RBInlineMethodRefactoring >> inlineSource: messageSendSource fromMethod: aSelect
 RBInlineMethodRefactoring >> inlineSourceReplacing: aParseTree [
 	| statements nodeUnderSequence |
 	statements := inlineParseTree body statements.
-	(statements size > 1 and: [ aParseTree isEvaluatedFirst not ]) ifTrue: [
-		self refactoringWarning:
-			'To inline this method, we need to move some of its statements before the original message send.<n>This could change the order of execution, which can change the behavior.<n>Do you want to proceed?'
-				expandMacros ].
 	nodeUnderSequence := aParseTree.
 	[ nodeUnderSequence parent isSequence ] whileFalse: [ nodeUnderSequence := nodeUnderSequence parent ].
 	nodeUnderSequence parent
