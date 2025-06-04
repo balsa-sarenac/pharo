@@ -38,9 +38,10 @@ StRefactoringAddClassPresenter >> defaultLayout [
 		  add: tagPresenter at: 2 @ 3 span: 2 @ 1;
 		  add: 'Comment' at: 1 @ 4;
 		  add: (SpBoxLayout newTopToBottom
-				add: useTemplateCheckPresenter expand: false;
-				add: commentPresenter withConstraints: [ : c | c height: 500 ];
-				yourself) at: 2 @ 4 span: 2 @ 1;
+				   add: useTemplateCheckPresenter expand: false;
+				   add: commentPresenter withConstraints: [ :c | c height: 500 ];
+				   yourself)
+		  at: 2 @ 4 span: 2 @ 1;
 		  beColumnNotHomogeneous;
 		  yourself
 ]
