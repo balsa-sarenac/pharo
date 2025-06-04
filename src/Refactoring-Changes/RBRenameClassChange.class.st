@@ -42,6 +42,10 @@ RBRenameClassChange >> executeNotifying: aBlock [
 	undos := changes collect: [ :each |
 		(each renameChangesForClass: oldName asSymbol to: newName asSymbol)
 			executeNotifying: aBlock ].
+	"Updating references to the class creates entry in undeclared registry,
+	we clean it now since it's expected."
+	(self changeClass undeclaredRegistry at: oldName asSymbol)
+		ifNil: [ self changeClass undeclaredRegistry removeKey: oldName asSymbol ].
 	^ self copy
 		changes: undos reverse;
 		rename: newName to: oldName;
