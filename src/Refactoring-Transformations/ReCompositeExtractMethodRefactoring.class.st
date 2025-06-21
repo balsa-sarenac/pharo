@@ -288,6 +288,11 @@ ReCompositeExtractMethodRefactoring >> extractSource: aString from: aSelector to
 	
 ]
 
+{ #category : 'preconditions' }
+ReCompositeExtractMethodRefactoring >> failedBreakingChangePreconditions [
+	^ self breakingChangePreconditions reject: [ :cond | cond check ]
+]
+
 { #category : 'executing' }
 ReCompositeExtractMethodRefactoring >> generateNewMethodWith: aMethodName [
 
