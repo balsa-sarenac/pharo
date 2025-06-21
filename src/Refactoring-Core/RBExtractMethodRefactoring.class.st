@@ -243,6 +243,7 @@ RBExtractMethodRefactoring >> extractMethod [
 	isSequence
 		ifTrue: [ self createModifiedParseTreeForSequenceSelection ]
 		ifFalse: [ self createModifiedParseTreeForNonSequenceSelection ].
+	modifiedParseTree ifNil: [ self refactoringError: 'modified parse tree was nil.' ].
 ]
 
 { #category : 'preparation' }
