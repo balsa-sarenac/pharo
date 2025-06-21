@@ -67,6 +67,7 @@ RBExtractMethodRefactoring >> applicabilityPreconditions [
 	^ {
 		  (RBCondition definesSelector: selector in: class).
 		  (RBCondition withBlock: [
+			modifiedParseTree ifNil: [ self refactoringError: 'mod par stree' ].
 			   self checkSpecialExtractions.
 			   self checkReturn.
 			   true ]) }
