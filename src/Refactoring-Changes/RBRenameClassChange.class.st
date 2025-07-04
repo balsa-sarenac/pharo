@@ -46,6 +46,7 @@ RBRenameClassChange >> executeNotifying: aBlock [
 	we clean it now since it's expected."
 	(self changeClass undeclaredRegistry at: oldName asSymbol)
 		ifNil: [ self changeClass undeclaredRegistry removeKey: oldName asSymbol ].
+	self changeClass undeclaredRegistry removeKey: oldName asSymbol ifAbsent: [ ].
 	^ self copy
 		changes: undos reverse;
 		rename: newName to: oldName;
