@@ -24,10 +24,10 @@ ReRemoveUnusedTemporaryVariableRefactoring class >> model: aRBNamespace inMethod
 ]
 
 { #category : 'initialization' }
-ReRemoveUnusedTemporaryVariableRefactoring >> inMethod: aSelector inClass: className [
+ReRemoveUnusedTemporaryVariableRefactoring >> inMethod: aSelector inClass: aClass [
 
 	selector := aSelector asSymbol.
-	class := self model classNamed: className
+	class := aClass
 ]
 
 { #category : 'transforming' }
