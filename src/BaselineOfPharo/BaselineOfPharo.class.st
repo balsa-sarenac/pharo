@@ -153,7 +153,7 @@ BaselineOfPharo class >> spec [
 		newName: 'Spec2' 
 		owner: 'pharo-spec' 
 		project:'Spec' 
-		version: 'v2.0.3'
+		version: 'v2.0.4'
 ]
 
 { #category : 'repository urls' }
