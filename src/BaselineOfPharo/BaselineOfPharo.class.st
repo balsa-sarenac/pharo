@@ -60,7 +60,7 @@ BaselineOfPharo class >> iceberg [
 		newName: 'Iceberg' 
 		owner: 'pharo-vcs' 
 		project: 'iceberg' 
-		version: 'v2.4.7'
+		version: 'v2.4.8'
 		sourceDir: nil
 ]
 
