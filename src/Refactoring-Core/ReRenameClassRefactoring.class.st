@@ -56,7 +56,8 @@ ReRenameClassRefactoring >> applicabilityPreconditions [
 		  (RBCondition withBlock: [
 			   self doesClassToBeRenamedExist and: [ self isNotMetaclass ] ]).
 		  self isValidClassName.
-		  self isNotGlobal }
+		  self isNotGlobal.
+		  self isNotInEnvironment }
 ]
 
 { #category : 'initialization' }
@@ -89,6 +90,12 @@ ReRenameClassRefactoring >> isMetaclass [
 ReRenameClassRefactoring >> isNotGlobal [
 
 	^ (RBCondition isGlobal: newName in: self model) not
+]
+
+{ #category : 'preconditions' }
+ReRenameClassRefactoring >> isNotInEnvironment [
+
+	^ RBCondition withBlock: [ (self model includesGlobal: newName) not ] errorString: 'Name exists in environment'
 ]
 
 { #category : 'preconditions' }
