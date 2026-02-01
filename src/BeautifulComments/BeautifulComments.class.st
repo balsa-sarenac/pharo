@@ -68,13 +68,8 @@ BeautifulComments class >> render: aString [
 
 { #category : 'rendering' }
 BeautifulComments class >> renderComment: aString of: aClassOrPackage [ 
-	"Return aString as part of the templated class comment, when rendering is on.
-	Else aString."
-	
-	| builder |
-	builder := Microdown builder.
-	aClassOrPackage buildMicroDownUsing: builder withComment: aString.
-	^ self render: builder contents
+
+    ^ aString
 ]
 
 { #category : 'settings' }

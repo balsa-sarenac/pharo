@@ -5,7 +5,7 @@ Toggle Edit/View comment to see how this is done.
 "
 Class {
 	#name : 'BCFailingOnPurposeForTestBlock',
-	#superclass : 'MicAnnotationBlock',
+	#superclass : 'AnObsoleteMicAnnotationBlock',
 	#classVars : [
 		'FailOnPurpose'
 	],

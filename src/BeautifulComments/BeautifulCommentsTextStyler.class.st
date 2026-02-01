@@ -6,7 +6,7 @@ I define the parameters of rich text styling for comments. I change two things c
 "
 Class {
 	#name : 'BeautifulCommentsTextStyler',
-	#superclass : 'MicTextStyler',
+	#superclass : 'AnObsoleteMicTextStyler',
 	#category : 'BeautifulComments-UI',
 	#package : 'BeautifulComments',
 	#tag : 'UI'
