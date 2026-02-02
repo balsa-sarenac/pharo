@@ -110,6 +110,12 @@ ReRenameClassRefactoring >> isValidClassName [
 	^ RBCondition isValidClassName: newName
 ]
 
+{ #category : 'accessing' }
+ReRenameClassRefactoring >> newName [
+
+	^ newName
+]
+
 { #category : 'initialization' }
 ReRenameClassRefactoring >> newName: aNewName [
 
