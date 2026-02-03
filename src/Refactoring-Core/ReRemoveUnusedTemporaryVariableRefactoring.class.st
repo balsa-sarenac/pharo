@@ -33,6 +33,7 @@ ReRemoveUnusedTemporaryVariableRefactoring >> inMethod: aSelector inClass: aClas
 { #category : 'transforming' }
 ReRemoveUnusedTemporaryVariableRefactoring >> prepareForExecution [ 
 
+	class isSymbol  ifTrue: [ class := self model classNamed: class ].
 	parseTree := class parseTreeForSelector: selector
 ]
 
