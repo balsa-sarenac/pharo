@@ -32,7 +32,7 @@ MetacelloMCBaselineOfProjectSpec >> canDowngradeTo: aProjectSpec [
 { #category : 'scripting' }
 MetacelloMCBaselineOfProjectSpec >> canUpgradeTo: aProjectSpec [
   "cannot upgrade between baselines unless repositories can be upgraded"
-
+^ true.
   (self repositories canUpgradeTo: aProjectSpec repositories)
     ifTrue: [ ^ true ].
   ^ false
