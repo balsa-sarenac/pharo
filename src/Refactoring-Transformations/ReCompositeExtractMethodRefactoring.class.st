@@ -149,7 +149,7 @@ ReCompositeExtractMethodRefactoring >> buildTransformationFor: newMethodName [
 		  add: (ReRemoveUnusedTemporaryVariableRefactoring
 				   model: self model
 				   inMethod: selector
-				   inClass: class name);
+				   inClass: class);
 		  yourself
 ]
 
