@@ -16,7 +16,7 @@ Class {
 SHCustomStyle class >> color: aColor forGroup: aGroupName [
 
 	(groups at: aGroupName) at: #color put: aColor.
-	SHPreferences cutomStyleChanged
+	SHPreferences customStyleChanged
 ]
 
 { #category : 'accessing' }
@@ -61,7 +61,7 @@ SHCustomStyle class >> defaultEmphasis [
 SHCustomStyle class >> emphasis: anEmphasis forGroup: aGroupName [
 
 	(groups at: aGroupName) at: #emphasis put: anEmphasis.
-	SHPreferences cutomStyleChanged
+	SHPreferences customStyleChanged
 ]
 
 { #category : 'accessing' }
