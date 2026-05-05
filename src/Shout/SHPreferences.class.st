@@ -52,20 +52,6 @@ SHPreferences class >> customStyleChanged [
 		self styleTable: SHCustomStyle styleTable ]
 ]
 
-{ #category : 'accessing - style defaults' }
-SHPreferences class >> defaultSyntaxStyle [
-
-	^ SHStyleElement tokens: #(#return #blockArgColon #parenthesis #parenthesis1 #parenthesis2 #parenthesis3 #parenthesis4 #parenthesis5 #parenthesis6 #parenthesis7 #block #block1 #block2 #block3 #block4 #block5 #block6 #block7 #byteArrayStart #byteArrayEnd #byteArrayStart1 #byteArrayEnd1 #brace #brace1 #brace2 #brace3 #brace4 #brace5 #brace6 #brace7 #cascadeSeparator #statementSeparator #methodTempBar #blockTempBar #blockArgsBar)
-]
-
-{ #category : 'accessing - style defaults' }
-SHPreferences class >> defaultVariableStyle [
-
-	^ SHStyleElement 
-		color: (Color r: 0.0 g: 0.0 b: 0.5004887585532747 alpha: 1.0) 
-		tokens: #(#blockTempVar #blockPatternTempVar #tempVar #patternTempVar #incompleteIdentifier)
-]
-
 { #category : 'reflective operations' }
 SHPreferences class >> doesNotUnderstand: aMessage [
 	"Handles messages of the form #defaultStyle or #argumentStyle: "
