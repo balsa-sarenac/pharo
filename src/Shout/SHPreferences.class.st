@@ -57,12 +57,12 @@ SHPreferences class >> doesNotUnderstand: aMessage [
 	"Handles messages of the form #defaultStyle or #argumentStyle: "
 
 	(aMessage selector endsWith: 'Style') ifTrue: [
-			^ SHCustomStyleElement group:
+			^ SHStyleElement group:
 				  (aMessage selector withoutSuffix: 'Style') asSymbol ].
 	(aMessage selector endsWith: 'Style:') ifTrue: [
 		| style |
 		style := aMessage argument.
-		(SHCustomStyleElement group: (style at: #group))
+		(SHStyleElement group: (style at: #group))
 			color: (style at: #color) ;
 			emphasis: (style at: #emphasis).
 		^ self ].

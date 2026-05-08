@@ -4,7 +4,7 @@ I am a style element of the custom style.
 I am just a proxy object for one of the groups stored in `SHCustomStyleSettings`
 "
 Class {
-	#name : 'SHCustomStyleElement',
+	#name : 'SHStyleElement',
 	#superclass : 'Object',
 	#instVars : [
 		'group'
@@ -15,7 +15,7 @@ Class {
 }
 
 { #category : 'accessing' }
-SHCustomStyleElement class >> group: groupName [
+SHStyleElement class >> group: groupName [
 
 	^ self basicNew
 		  group: groupName;
@@ -23,13 +23,13 @@ SHCustomStyleElement class >> group: groupName [
 ]
 
 { #category : 'instance creation' }
-SHCustomStyleElement class >> new [
+SHStyleElement class >> new [
 	"Please use #group: to create an instance"
 	self shouldNotImplement
 ]
 
 { #category : 'settings' }
-SHCustomStyleElement class >> settingInputWidgetForNode: aSettingNode [
+SHStyleElement class >> settingInputWidgetForNode: aSettingNode [
 
 	| theme |
 	theme := UITheme builder.
@@ -52,30 +52,30 @@ SHCustomStyleElement class >> settingInputWidgetForNode: aSettingNode [
 ]
 
 { #category : 'accessing' }
-SHCustomStyleElement >> color [
+SHStyleElement >> color [
 
 	^ SHCustomStyle colorForGroup: group
 ]
 
 { #category : 'accessing' }
-SHCustomStyleElement >> color: aColor [
+SHStyleElement >> color: aColor [
 
 	^ SHCustomStyle color: aColor forGroup: group
 ]
 
 { #category : 'accessing' }
-SHCustomStyleElement >> emphasis [
+SHStyleElement >> emphasis [
 
 	^ SHCustomStyle emphasisForGroup: group
 ]
 
 { #category : 'accessing' }
-SHCustomStyleElement >> emphasis: anEmphasis [
+SHStyleElement >> emphasis: anEmphasis [
 
 	^ SHCustomStyle emphasis: anEmphasis forGroup: group
 ]
 
 { #category : 'accessing' }
-SHCustomStyleElement >> group: aString [ 
+SHStyleElement >> group: aString [ 
 	group := aString
 ]

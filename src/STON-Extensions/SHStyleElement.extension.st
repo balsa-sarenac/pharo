@@ -1,7 +1,7 @@
-Extension { #name : 'SHCustomStyleElement' }
+Extension { #name : 'SHStyleElement' }
 
 { #category : '*STON-Extensions' }
-SHCustomStyleElement >> stonOn: stonWriter [
+SHStyleElement >> stonOn: stonWriter [
 
 	stonWriter writeMap: {
 			(#group -> group).
