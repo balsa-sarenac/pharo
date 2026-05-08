@@ -62,9 +62,9 @@ SHPreferences class >> doesNotUnderstand: aMessage [
 	(aMessage selector endsWith: 'Style:') ifTrue: [
 		| style |
 		style := aMessage argument.
-		(SHStyleElement group: (style at: #group))
-			color: (style at: #color) ;
-			emphasis: (style at: #emphasis).
+		(SHStyleElement group: (style at: 'group'))
+			color: (style at: 'color') ;
+			emphasis: (style at: 'emphasis').
 		^ self ].
 	^ super doesNotUnderstand: aMessage
 ]
@@ -93,7 +93,7 @@ SHPreferences class >> settingsOn: aBuilder [
 	
 	<systemsettings>
 	(aBuilder group: 'Syntax Highlighting')
-		parentName: #codeBrowsing;
+		parentName: 'codeBrowsing';
 		target: self;
 		iconName: #smallConfiguration;
 		noOrdering;
@@ -108,7 +108,7 @@ SHPreferences class >> settingsOn: aBuilder [
 					target: SHRBTextStyler;
 					default: false;
 					label: 'Format Incomplete Identifiers';
-					parentName: #'Syntax Highlighting';
+					parentName: 'Syntax Highlighting';
 					description:
 						'If the code highlighter tryies to format incomplete identifiers and selectors or not. This is not recommended for big images, as it traverse all the image to get the information'.
 				(aBuilder pickOne: #activeStyleTable)
@@ -117,7 +117,7 @@ SHPreferences class >> settingsOn: aBuilder [
 					domainValues: self styleTableNames;
 					description: 'Choose between the different styles.  Default changes according to the UI Theme and Custom can be modified by you.' ;
 					default: 'Default'.
-				(aBuilder group: #'Edit Custom Style')
+				(aBuilder group: 'Edit Custom Style')
 					description: 'Change the Custom style to your liking.  You have to activate it for your changes to take effect.' ;
 					dialog: [
 							Smalltalk ui theme
@@ -132,10 +132,10 @@ SHPreferences class >> settingsOn: aBuilder [
 									'Initialize custom style to colors of the currently selected them' ];
 					with: [
 							SHCustomStyle groups keysAndValuesDo: [ :group :info |
-										(aBuilder setting: group , #Style)
+										(aBuilder setting: group , 'Style')
 											target: self;
-											label: (info at: #label);
-											description: (info at: #description ifAbsent: [ '' ]) ] ] ]
+											label: (info at: 'label');
+											description: (info at: 'description' ifAbsent: [ '' ]) ] ] ]
 ]
 
 { #category : 'private' }
