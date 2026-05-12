@@ -261,6 +261,7 @@ RGMethodDefinition >> fullName [
 	^self annotationNamed: self class fullNameKey
 		ifAbsentPut: [ (self parentName, '>>', self selector) asSymbol ]
 ]
+
 { #category : 'testing' }
 RGMethodDefinition >> hasStamp [
 
@@ -303,6 +304,12 @@ RGMethodDefinition >> isDefined [
 	self selector isDoIt ifTrue:[ ^false ].
 	rClass := self realClass.
 	^rClass isNotNil and: [ rClass includesSelector: self selector ]
+]
+
+{ #category : 'testing' }
+RGMethodDefinition >> isDeprecated [
+
+	^ self compiledMethod ifNotNil: [ :cm | cm isDeprecated ] ifNil: [ false ]
 ]
 
 { #category : 'testing' }
