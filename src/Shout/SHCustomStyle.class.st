@@ -32,7 +32,7 @@ SHCustomStyle class >> copyFromCurrentStyle [
 			| token |
 			token := row first.
 			groups
-				detect: [ :entry | token = (entry at: #tokens) first ]
+				detect: [ :entry | token = (entry at: 'tokens') first ]
 				ifFound: [ :entry |
 						| colorDesc emphasis |
 						colorDesc := row second.
@@ -76,29 +76,29 @@ SHCustomStyle class >> groupDefaults [
 	^ Dictionary newFrom: {
 			  ('default' -> {
 				   ('name' -> 'default').
-				   ('tokens' -> #( #default )).
+				   ('tokens' -> #( 'default' )).
 				   ('label' -> 'Default').
 				   ('description' -> 'Default style') } asDictionary).
 			  ('reservedWords' -> {
 				   ('name' -> 'reservedWords').
-				   ('tokens' -> #( #self #super #true #false #nil #thisContext )).
+				   ('tokens' -> #( 'self' 'super' 'true' 'false' 'nil' 'thisContext' )).
 				   ('label' -> 'Reserved words').
 				   ('description' -> 'Reserved words of the Smalltalk language') }
 				   asDictionary).
 			  ('primitiveTypes' -> {
 				   ('name' -> 'primitiveTypes').
 				   ('description' -> 'Literal data').
-				   ('tokens' -> #( #character #number #symbol #string )).
+				   ('tokens' -> #( 'character' 'number' 'symbol' 'string' )).
 				   ('label' -> 'Primitive types') } asDictionary).
 			  ('selectorPatterns' -> {
 				   ('name' -> 'selectorPatterns').
-				   ('tokens' -> #( #patternSelector )).
+				   ('tokens' -> #( 'patternSelector' )).
 				   ('label' -> 'Selector Patterns').
 				   ('description' -> 'Selector patterns in method pane') }
 				   asDictionary).
 			  ('messageSends' -> {
 				   ('name' -> 'messageSends').
-				   ('tokens' -> #( selector incompleteSelector )).
+				   ('tokens' -> #( 'selector' 'incompleteSelector' )).
 				   ('label' -> 'Message sends') } asDictionary).
 			  ('args' -> {
 				   ('name' -> 'args').
@@ -106,7 +106,7 @@ SHCustomStyle class >> groupDefaults [
 				   ('description'
 				    -> 'Parameters in patterns, message sends, and blocks').
 				   ('tokens'
-				    -> #( patternArg blockPatternArg blockArg argument )) }
+				    -> #( 'patternArg' 'blockPatternArg' 'blockArg' 'argument' )) }
 				   asDictionary).
 			  ('variable' -> {
 				   ('name' -> 'variable').
@@ -114,45 +114,45 @@ SHCustomStyle class >> groupDefaults [
 				   ('description' -> 'Temporary variable').
 				   ('tokens'
 				    ->
-					    #( blockTempVar blockPatternTempVar tempVar patternTempVar
-					       incompleteIdentifier )) } asDictionary).
+					    #( 'blockTempVar' 'blockPatternTempVar' 'tempVar' 'patternTempVar'
+					       'incompleteIdentifier' )) } asDictionary).
 			  ('instanceVar' -> {
 				   ('name' -> 'instanceVar').
 				   ('label' -> 'Instance/class variables').
 				   ('description' -> 'References to instance and class variables').
-				   ('tokens' -> #( instVar classVar )) } asDictionary).
+				   ('tokens' -> #( 'instVar' 'classVar' )) } asDictionary).
 			  ('globalVar' -> {
 				   ('name' -> 'globalVar').
 				   ('label' -> 'Global variables').
 				   ('description'
 				    -> 'References to global variables, including classes').
-				   (#tokens -> #( #globalVar #poolConstant )) } asDictionary).
+				   ('tokens' -> #( 'globalVar' 'poolConstant' )) } asDictionary).
 			  ('comment' -> {
-				   ('name' -> #comment).
+				   ('name' -> 'comment').
 				   ('label' -> 'Comments').
 				   ('descripiton' -> 'Comments in code pane').
-				   ('tokens' -> #( #comment )) } asDictionary).
+				   ('tokens' -> #( 'comment' )) } asDictionary).
 			  ('error' -> {
-				   ('name' -> #error).
+				   ('name' -> 'error').
 				   ('label' -> 'Syntactic error').
 				   ('description' -> 'Invalid and undefined code').
 				   ('tokens'
-				    -> #( #invalid #undefinedSelector #undefinedIdentifier )) }
+				    -> #( 'invalid' 'undefinedSelector' 'undefinedIdentifier' )) }
 				   asDictionary).
 			  ('syntax' -> {
-				   ('name' -> #syntax).
+				   ('name' -> 'syntax').
 				   ('label' -> 'Syntax').
 				   ('description' -> 'Any other syntactic element').
 				   ('tokens'
 				    ->
-					    #( #return #blockArgColon #parenthesis #parenthesis1
-					       #parenthesis2 #parenthesis3 #parenthesis4 #parenthesis5
-					       #parenthesis6 #parenthesis7 #block #block1 #block2 #block3
-					       #block4 #block5 #block6 #block7 #byteArrayStart
-					       #byteArrayEnd #byteArrayStart1 #byteArrayEnd1
-					       #brace #brace1 #brace2 #brace3 #brace4 #brace5 #brace6
-					       #brace7 #cascadeSeparator #statementSeparator
-					       #methodTempBar #blockTempBar #blockArgsBar )) }
+					    #( 'return' 'blockArgColon' 'parenthesis' 'parenthesis1'
+					       'parenthesis2' 'parenthesis3' 'parenthesis4' 'parenthesis5'
+					       'parenthesis6' 'parenthesis7' 'block' 'block1' 'block2' 'block3'
+					       'block4' 'block5' 'block6' 'block7' 'byteArrayStart'
+					       'byteArrayEnd' 'byteArrayStart1' 'byteArrayEnd1'
+					       'brace' 'brace1' 'brace2' 'brace3' 'brace4' 'brace5' 'brace6'
+					       'brace7' 'cascadeSeparator' 'statementSeparator'
+					       'methodTempBar' 'blockTempBar' 'blockArgsBar' )) }
 				   asDictionary) }
 ]
 
