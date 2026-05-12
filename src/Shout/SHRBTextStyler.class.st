@@ -361,25 +361,20 @@ SHRBTextStyler class >> initialTextAttributes [
 { #category : 'attributes' }
 SHRBTextStyler class >> initialTextAttributesForStyleTable: aStyleTable [
 	"Parses aStyleTable and answer a dictionary of attributes, with attribute name as key."
-	| dictionary |
-	
-	dictionary := IdentityDictionary new.
-	aStyleTable do: [ :each |
-		| element emphasis color backgroundColor |
-		
-		element := each at: 1.
-		color := each at: 2 ifAbsent: [ ].
-		color := color ifNotNil: [ Color colorFrom: color ].
-		emphasis := each at: 3 ifAbsent: [  ].
-		backgroundColor := each at: 4 ifAbsent: [ ].
-		backgroundColor := backgroundColor ifNotNil: [ Color colorFrom: backgroundColor ].
 
-		(self 
-			attributeArrayForColor: color 
-			backgroundColor: backgroundColor
-			emphasis: emphasis)
-		ifNotEmpty: [ :attrArray | 
-			dictionary at: element put: attrArray ] ].
+	| dictionary |
+	dictionary := Dictionary new.
+	aStyleTable do: [ :each |
+			| element emphasis color backgroundColor |
+			element := each at: 1.
+			color := each at: 2 ifAbsent: [ ].
+			color := color ifNotNil: [ Color colorFrom: color ].
+			emphasis := each at: 3 ifAbsent: [ ].
+			backgroundColor := each at: 4 ifAbsent: [ ].
+			backgroundColor := backgroundColor ifNotNil: [ Color colorFrom: backgroundColor ].
+
+			(self attributeArrayForColor: color backgroundColor: backgroundColor emphasis: emphasis) ifNotEmpty: [ :attrArray |
+				dictionary at: element put: attrArray ] ].
 
 	^ dictionary
 ]
