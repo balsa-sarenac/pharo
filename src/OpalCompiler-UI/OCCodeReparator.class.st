@@ -191,6 +191,12 @@ OCCodeReparator >> possibleVariablesFor: proposedVariable [
 	^ proposedVariable correctAgainst: nil continuedFrom: results
 ]
 
+{ #category : 'menu morph' }
+OCCodeReparator >> repair [
+	
+	^ self openMenu
+]
+
 { #category : 'accessing' }
 OCCodeReparator >> requestor [
 
@@ -219,8 +225,4 @@ OCCodeReparator >> substituteWord: correctWord wordInterval: spot [
 	self requestor correctFrom: (spot first)
 					to: (spot last)
 					with: correctWord
-]
-
-{ #category : 'correcting' }
-OCCodeReparator >> toto [
 ]

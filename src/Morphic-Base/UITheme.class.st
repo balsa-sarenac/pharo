@@ -230,6 +230,12 @@ UITheme >> balloonTextColor [
 ]
 
 { #category : 'accessing - colors' }
+UITheme >> baseBorderColor [
+
+	^ colorPalette baseBorderColor
+]
+
+{ #category : 'accessing - colors' }
 UITheme >> baseColor [
 
 	^ colorPalette baseColor
@@ -4050,6 +4056,12 @@ UITheme >> selectedItemListTextColor [
 ]
 
 { #category : 'accessing - colors' }
+UITheme >> selectedTabBorderColor [
+
+	^ colorPalette selectedTabBorderColor
+]
+
+{ #category : 'accessing - colors' }
 UITheme >> selectionBarColor [
 
 	^ colorPalette selectionBarColor
@@ -4443,10 +4455,16 @@ UITheme >> taskbarMinimizedButtonColorFor: aButton [
 ]
 
 { #category : 'border-styles' }
+UITheme >> taskbarThumbnailBorderWidthFor: aMorph [
+
+	^ 0
+]
+
+{ #category : 'border-styles' }
 UITheme >> taskbarThumbnailCornerStyleFor: aMorph [
 	"Answer the corner style for the taskbar thumbnail/tasklist."
 
-	^#square
+	^ #rounded
 ]
 
 { #category : 'border-styles' }

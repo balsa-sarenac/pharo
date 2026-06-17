@@ -966,6 +966,17 @@ OCProgramNode >> match: aNode inContext: aDictionary [
 	^ self = aNode
 ]
 
+{ #category : 'testing - matching' }
+OCProgramNode >> match: aNode onSuccess: aBlock onFailure: anAlternativeBlock [
+	| context |
+
+	context := SmallDictionary new.
+
+	(self match: aNode inContext: context)
+		ifTrue: [ aBlock cull: context ]
+		ifFalse: anAlternativeBlock
+]
+
 { #category : 'matching' }
 OCProgramNode >> matchList: matchNodes against: programNodes inContext: aDictionary [
 	^self
@@ -1285,9 +1296,12 @@ OCProgramNode >> sourceCode [
 	interval := self sourceInterval.
 	interval ifEmpty: [ ^ '' ].
 
-	^ self source
-		copyFrom: interval first
-		to: interval last
+	^ self source 
+		ifNotNil: [ :s |
+			s
+			copyFrom: interval first
+			to: interval last]
+		ifNil: [ '' ]
 ]
 
 { #category : 'accessing' }

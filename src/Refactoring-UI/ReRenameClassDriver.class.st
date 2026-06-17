@@ -42,7 +42,7 @@ ReRenameClassDriver >> browseMethods [
 	references := refactoring violations.
 	(Smalltalk tools toolNamed: #messageList)
 		browse: (references collect: [ :ref | ref origin realClass lookupSelector: ref selector ])
-		title: 'Methods containing references to a shared var that will shadow class reference after renaming'
+		title: 'Methods containing references to a shared var that will shadow class reference after renaming' 
 ]
 
 { #category : 'execution' }
@@ -74,7 +74,6 @@ ReRenameClassDriver >> gatherUserInput [
 ReRenameClassDriver >> initialize [
 
 	super initialize.
-	requestDialog := self defaultRequestDialog.
 	shouldEscape := false
 ]
 
@@ -110,21 +109,23 @@ ReRenameClassDriver >> renameClass [
 { #category : 'execution' }
 ReRenameClassDriver >> requestNewNameBasedOn: aName [
 
-	newName := requestDialog 
-		           title: 'Please provide a new class name';
-		           message: 'The new name should be valid and not the one of an existing class.';
-		           validateAnswer: [ :string :presenter | self validateName: string onPresenter: presenter ];
-		           text: aName;
-		           openModal.
+	newName := self requestDialog 
+		title: 'Please provide a new class name';
+		message: 'The new name should be valid and not the one of an existing class.';
+		validateAnswer: [ :string :presenter | 
+			self validateName: string onPresenter: presenter ];
+		text: aName;
+		openModal.
 
 	newName ifNil: [
-			shouldEscape := true.
-			^ self ].
+		shouldEscape := true.
+		^ self ].
 	newName = oldName ifTrue: [
-			shouldEscape := true.
-			^ self ].
+		shouldEscape := true.
+		^ self ].
 
 	refactoring newName: newName.
+	
 	^ newName
 ]
 
