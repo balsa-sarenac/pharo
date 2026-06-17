@@ -76,6 +76,26 @@ SHStyleElement >> emphasis: anEmphasis [
 ]
 
 { #category : 'accessing' }
+SHStyleElement >> group [
+
+	^ group
+]
+
+{ #category : 'accessing' }
 SHStyleElement >> group: aString [ 
 	group := aString
+]
+
+{ #category : 'printing' }
+SHStyleElement >> printOn: aStream [
+	super printOn: aStream.
+	aStream nextPutAll: ' group: '.
+	group printOn: aStream.
+	aStream nextPutAll: ' (color: '.
+	"aStream nextPutAll: self color shortPrintString."
+	aStream nextPut: $#.
+	aStream nextPutAll: self color asHexString.
+	aStream nextPutAll: ', emphasis: '.
+	self emphasis printOn: aStream.
+	aStream nextPutAll: ')'.
 ]
