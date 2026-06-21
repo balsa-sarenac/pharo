@@ -586,32 +586,6 @@ Object >> copySameFrom: otherObject [
 		self basicAt: i put: (otherObject basicAt: i)]
 ]
 
-{ #category : 'copying' }
-Object >> deepCopy [
-	"Answer a copy of the receiver with its own copy of each instance variable. deepCopy does a deep copy. It should never be overridden and only be used if you want to get these very specific semantics.
-It doesn't handle cycles, #veryDeepCopy does. In the future we will make it handle cycles and deprecate veryDeepCopy"
-
-
-	| newObject class index |
-	class := self class.
-	(class == Object) ifTrue: [^self].
-	class isVariable
-		ifTrue:
-			[index := self basicSize.
-			newObject := class basicNew: index.
-			[index > 0]
-				whileTrue:
-					[newObject basicAt: index put: (self basicAt: index) deepCopy.
-					index := index - 1]]
-		ifFalse: [newObject := class basicNew].
-	index := class instSize.
-	[index > 0]
-		whileTrue:
-			[newObject instVarAt: index put: (self instVarAt: index) deepCopy.
-			index := index - 1].
-	^newObject
-]
-
 { #category : 'displaying' }
 Object >> displayString [
 	"While printString is about to give a detailled information about an object, displayString is a message that should return a short string-based representation to be used by list and related UI frameworks. By default, simply return printString. Subclasses should not override this method but instead stream based method #displayStringOn:"

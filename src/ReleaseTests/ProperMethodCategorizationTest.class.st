@@ -88,13 +88,6 @@ ProperMethodCategorizationTest >> testCopyMethodNeedsToBeInCopyingProtocol [
 ]
 
 { #category : 'tests - object' }
-ProperMethodCategorizationTest >> testDeepCopyMethodNeedsToBeInCopyingProtocol [
-	"The #deepCopy methods should be in method protocol 'copying'"
-
-	self assureAll: #deepCopy areCategorizedIn: #copying whenSubclassOf: Object
-]
-
-{ #category : 'tests - object' }
 ProperMethodCategorizationTest >> testEqualMethodNeedsToBeInComparingProtocol [
 	"The #= method should be in method protocol 'comparing'"
 

@@ -1134,14 +1134,6 @@ String >> correctAgainstEnumerator: wordBlock continuedFrom: oldCollection [
 	^ results
 ]
 
-{ #category : 'copying' }
-String >> deepCopy [
-	"DeepCopy would otherwise mean make a copy of the character;  since
-	characters are unique, just return a shallowCopy."
-
-	^self shallowCopy
-]
-
 { #category : 'displaying' }
 String >> displayStringOn: aStream [
 	"Make sure that this is not printOn: because we do not want to have multiple quotes."
