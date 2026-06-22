@@ -586,6 +586,12 @@ Object >> copySameFrom: otherObject [
 		self basicAt: i put: (otherObject basicAt: i)]
 ]
 
+{ #category : 'copying' }
+Object >> deepCopy [
+	self deprecated: 'Use copy instead and migrate to copy/postCopy logic. Remember deep copy did NOT handle cycles'.
+	^ self shallowCopy postCopy
+]
+
 { #category : 'displaying' }
 Object >> displayString [
 	"While printString is about to give a detailled information about an object, displayString is a message that should return a short string-based representation to be used by list and related UI frameworks. By default, simply return printString. Subclasses should not override this method but instead stream based method #displayStringOn:"
