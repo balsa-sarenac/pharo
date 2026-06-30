@@ -208,6 +208,12 @@ ScopedSelector >> keywords [
 ]
 
 { #category : 'accessing' }
+ScopedSelector >> localizedForPresenter: aSpLabelPresenter [
+
+	^ self asString localizedForPresenter: aSpLabelPresenter
+]
+
+{ #category : 'accessing' }
 ScopedSelector >> lookupAliasedMethodOnReceiverClass: aClass [
 
 	^ self lookupAliasedMethodOnReceiverClass: aClass lookupClass: nil
