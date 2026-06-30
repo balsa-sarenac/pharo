@@ -33,6 +33,9 @@ OCExtensionMethodInstaller >> install: method into: extension compiler: compiler
 	literalIndex > 0 ifTrue: [
 		"Then, patching the literal should fix also sends to this selector in the method"
 		method literalAt: literalIndex put: scopedSelector ].
+	"Also set the extension class into the method.
+	The method belongs to the extension and not to the extended class."
+	method methodClass: extension.
 	
 	super install: method into: extension compiler: compiler.
 	
