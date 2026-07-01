@@ -146,12 +146,6 @@ SmallFloat64 >> copy [
 	^self
 ]
 
-{ #category : 'copying' }
-SmallFloat64 >> deepCopy [
-	"Answer the receiver, because SmallFloat64s are unique."
-	^self
-]
-
 { #category : 'mathematical functions' }
 SmallFloat64 >> exp [
 	"Answer E raised to the receiver power.

@@ -390,17 +390,6 @@ Paragraph >> containsPoint: aPoint [
 		containsPoint: aPoint
 ]
 
-{ #category : 'copying' }
-Paragraph >> deepCopy [
-	"Don't want to copy the container (etc) or fonts in the TextStyle."
-	| new |
-	new := self copy.
-	new textStyle: textStyle copy
-		lines: lines copy
-		text: text deepCopy.
-	^ new
-]
-
 { #category : 'selection' }
 Paragraph >> defaultCharacterBlock [
 	^ (CharacterBlock new stringIndex: firstCharacterIndex text: text
@@ -751,6 +740,16 @@ Paragraph >> numberOfLines [
 { #category : 'private' }
 Paragraph >> positionWhenComposed: pos [
 	positionWhenComposed := pos
+]
+
+{ #category : 'copying' }
+Paragraph >> postCopy [
+	
+	super postCopy.
+	self 
+		textStyle: textStyle copy
+		lines: lines copy
+		text: text copy
 ]
 
 { #category : 'composition' }
