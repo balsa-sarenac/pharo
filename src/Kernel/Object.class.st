@@ -539,8 +539,10 @@ Object >> clone [
 	"Answer a shallow copy of the receiver."
 	<primitive: 148 error: ec>
 	| class newObject |
+	
 	ec == #'insufficient object memory' ifFalse:
 		[^self primitiveFailed].
+	self deprecated: 'Use shallowCopy'.
 	"If the primitive fails due to insufficient memory, instantiate via basicNew: to invoke the garbage collector before retrying, and use copyFrom: to copy state."
 	newObject := (class := self class) isVariable
 					ifTrue: [class basicNew: self basicSize]

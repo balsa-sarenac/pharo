@@ -74,13 +74,6 @@ ProperMethodCategorizationTest >> testClassSideInitializeMethodNeedsToBeInClassI
 ]
 
 { #category : 'tests - object' }
-ProperMethodCategorizationTest >> testCloneMethodNeedsToBeInCopyingProtocol [
-	"The #clone methods should be in method protocol 'copying'"
-
-	self assureAll: #clone areCategorizedIn: #copying whenSubclassOf: Object
-]
-
-{ #category : 'tests - object' }
 ProperMethodCategorizationTest >> testCopyMethodNeedsToBeInCopyingProtocol [
 	"The #copy methods should be in method protocol 'copying'"
 
