@@ -5,10 +5,25 @@ Class {
 		'extendedClass',
 		'userPackages'
 	],
+	#classInstVars : [
+		'AllowMigration'
+	],
 	#category : 'Kernel-CodeModel-Extensions',
 	#package : 'Kernel-CodeModel',
 	#tag : 'Extensions'
 }
+
+{ #category : 'accessing' }
+Extension class >> allowMigration [
+
+	^ AllowMigration ifNil: [ true ]
+]
+
+{ #category : 'accessing' }
+Extension class >> allowMigration: aBoolean [
+
+	^ AllowMigration := aBoolean
+]
 
 { #category : 'accessing' }
 Extension >> addUserPackage: aPackage [

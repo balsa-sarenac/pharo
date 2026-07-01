@@ -71,12 +71,14 @@ ScopedSelector >> bindAliasIn: aClass [
 	If many extensions are available on the same class, with the same name => conflict.
 	If there is an extension"
 
-	| theAliasedMethod allVisibleExtensionsForThisClass locallyDefined methodsInConflict |
+	| theAliasedMethod allVisibleExtensionsForThisClass locallyDefined methodsInConflict existingMethod isLegacyExtension |
 	allVisibleExtensionsForThisClass := self visibleExtensionsOn: aClass.
 
 	"Prevent conflicts!"
-	locallyDefined := aClass includesSelector: self symbol.
-	methodsInConflict := locallyDefined
+	existingMethod := aClass methodDict at: self symbol ifAbsent: [ nil ].
+	isLegacyExtension := Extension allowMigration and: [existingMethod notNil and: [ existingMethod isExtension ] ].
+
+	locallyDefined := (aClass includesSelector: self symbol) and: [ isLegacyExtension not ].methodsInConflict := locallyDefined
 		ifTrue: [ 1 ]
 		ifFalse: [ 0 ].
 	methodsInConflict := methodsInConflict + allVisibleExtensionsForThisClass size.
