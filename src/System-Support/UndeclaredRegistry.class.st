@@ -11,7 +11,7 @@ Class {
 	#tag : 'Utilities'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'checking' }
 UndeclaredRegistry >> verifyEmpty [
 	"Check if the receiver is emtpy.
 	If not, fail with an exception.
