@@ -706,6 +706,15 @@ String >> asOctetString [
 { #category : 'converting' }
 String >> asPluralBasedOn: aNumberOrCollection [
 	"Append an 's' to this string based on whether aNumberOrCollection is 1 or of size 1."
+	
+	"('test' asPluralBasedOn: 0) >>> 'tests'"
+	"('test' asPluralBasedOn: #()) >>> 'tests'"
+	"('test' asPluralBasedOn: 1) >>> 'test'"
+	"('test' asPluralBasedOn: #(#first)) >>> 'test'"
+	"('test' asPluralBasedOn: 2) >>> 'tests'"
+	"('test' asPluralBasedOn: #(#first #second)) >>> 'tests'"
+	"('test' asPluralBasedOn: 100) >>> 'tests'"
+	"('test' asPluralBasedOn: (1 to: 100)) >>> 'tests'"
 
 	^ (aNumberOrCollection = 1 or:
 		[aNumberOrCollection isCollection and: [aNumberOrCollection size = 1]])
