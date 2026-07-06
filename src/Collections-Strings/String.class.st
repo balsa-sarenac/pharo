@@ -936,6 +936,14 @@ String >> compare: aString [
 
 { #category : 'comparing' }
 String >> compare: aString caseSensitive: aBool [
+	"('cAt' compare: 'ct' caseSensitive: true) >>> 1"
+	"('CAT' compare: 'CAT' caseSensitive: true) >>> 2"
+	"('xaT' compare: 'xAT' caseSensitive: true) >>> 3"
+	
+	"('CAT' compare: 'dat' caseSensitive: false) >>> 1"
+	"('CAT' compare: 'cat' caseSensitive: false) >>> 2"
+	"('xAT' compare: 'cat' caseSensitive: false) >>> 3"
+	
 	"Answer a comparison code telling how the receiver sorts relative to aString:
 		1 - before
 		2 - equal
