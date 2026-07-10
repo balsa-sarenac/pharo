@@ -105,7 +105,7 @@ BaselineOfKernel >> baseline: spec [
 				package: 'Math-Operations-Extensions';
 				package: 'System-NumberPrinting';
 				package: 'System-Version';
-				package: 'System-Version-Tests' with: [ spec requires: #( 'System-Version' 'ClapTests' ) ];
+				package: 'System-Version-Tests' with: [ spec requires: #( 'ClapTests' 'System-Version' ) ];
 				package: 'Multilingual-Encodings';
 				package: 'Kernel-Tests';
 				package: 'Kernel-CodeModel-Tests';
