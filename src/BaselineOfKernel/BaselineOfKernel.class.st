@@ -53,16 +53,23 @@ BaselineOfKernel >> baseline: spec [
 						repository: repository;
 						loads: #('KernelTests') ];
 					
-					
 				baseline: 'Announcements-Core-Tests' with: [
 					spec
 						className: 'BaselineOfAnnouncements';
 						repository: repository;
 						loads: #( 'Tests' ) ];
+
 				baseline: 'SystemFinalization' with: [
 					spec
 						repository: repository;
 						loads: #( 'Tests' ) ];
+				
+				baseline: 'ClapTests' with: [
+            		spec
+               		repository: repository;
+						className: 'BaselineOfClap';
+               		loads: #( 'Tests' ) ];
+
 				package: 'Announcements-Core';
 				package: 'Collections-Abstract';
 				package: 'Collections-DoubleLinkedList';
@@ -98,7 +105,7 @@ BaselineOfKernel >> baseline: spec [
 				package: 'Math-Operations-Extensions';
 				package: 'System-NumberPrinting';
 				package: 'System-Version';
-				package: 'System-Version-Tests' with: [ spec requires: #( 'System-Version' ) ];
+				package: 'System-Version-Tests' with: [ spec requires: #( 'System-Version' 'ClapTests' ) ];
 				package: 'Multilingual-Encodings';
 				package: 'Kernel-Tests';
 				package: 'Kernel-CodeModel-Tests';
