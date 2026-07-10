@@ -64,11 +64,14 @@ BaselineOfKernel >> baseline: spec [
 						repository: repository;
 						loads: #( 'Tests' ) ];
 				
-				baseline: 'ClapTests' with: [
-            		spec
-               		repository: repository;
-						className: 'BaselineOfClap';
-               		loads: #( 'Tests' ) ];
+				
+				baseline: #SystemVersion with: [
+					spec
+						repository: repository;
+						loads: 'Core' ];
+				project: #SystemVersionTests
+					copyFrom: #SystemVersion
+					with: [ spec loads: 'Tests' ];
 
 				package: 'Announcements-Core';
 				package: 'Collections-Abstract';
@@ -104,8 +107,6 @@ BaselineOfKernel >> baseline: spec [
 				package: 'System-Time';
 				package: 'Math-Operations-Extensions';
 				package: 'System-NumberPrinting';
-				package: 'System-Version';
-				package: 'System-Version-Tests' with: [ spec requires: #( 'ClapTests' 'System-Version' ) ];
 				package: 'Multilingual-Encodings';
 				package: 'Kernel-Tests';
 				package: 'Kernel-CodeModel-Tests';
@@ -120,9 +121,9 @@ BaselineOfKernel >> baseline: spec [
 					'System-Finalization'. 'System-Platforms'. 'System-SessionManager'. 'System-Support'. 'Zinc-Character-Encoding-Core' };
 				group: 'AdditionalPackages'
 				with: { 'Clap-Core'. 'Clap-Commands-Pharo'. 'Hermes-Extensions'. 'NumberParser'. 'ReflectionMirrors-Primitives'.
-					'System-Time'. 'Math-Operations-Extensions'. 'System-NumberPrinting'. 'System-Version'. 'Multilingual-Encodings' };
+					'System-Time'. 'Math-Operations-Extensions'. 'System-NumberPrinting'. 'SystemVersion'. 'Multilingual-Encodings' };
 				group: 'Tests'
 				with:
 					{ 'Collections-Tests'. 'Kernel-Tests'. 'Kernel-CodeModel-Tests'. 'Announcements-Core-Tests'. 'System-Platforms-Tests'.
-					 'Files-Tests'. 'SystemFinalization'. 'Zinc-Character-Encoding-Tests'. 'System-Time-Tests' . 'Hermes-Extensions-Tests' . 'System-Version-Tests' } ]
+					 'Files-Tests'. 'SystemFinalization'. 'Zinc-Character-Encoding-Tests'. 'System-Time-Tests' . 'Hermes-Extensions-Tests' . 'SystemVersionTests' } ]
 ]
