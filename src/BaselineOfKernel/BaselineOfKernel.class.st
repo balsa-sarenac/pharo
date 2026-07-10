@@ -89,6 +89,7 @@ BaselineOfKernel >> baseline: spec [
 				package: 'System-Support';
 				package: 'Zinc-Character-Encoding-Core';
 				package: 'Hermes-Extensions';
+				package: 'Hermes-Extensions-Tests' with: [ spec requires: #( 'Hermes-Extensions' ) ];
 				package: 'Clap-Core';
 				package: 'Clap-Commands-Pharo';
 				package: 'NumberParser';
@@ -97,6 +98,7 @@ BaselineOfKernel >> baseline: spec [
 				package: 'Math-Operations-Extensions';
 				package: 'System-NumberPrinting';
 				package: 'System-Version';
+				package: 'System-Version-Tests' with: [ spec requires: #( 'System-Version' ) ];
 				package: 'Multilingual-Encodings';
 				package: 'Kernel-Tests';
 				package: 'Kernel-CodeModel-Tests';
@@ -115,5 +117,5 @@ BaselineOfKernel >> baseline: spec [
 				group: 'Tests'
 				with:
 					{ 'Collections-Tests'. 'Kernel-Tests'. 'Kernel-CodeModel-Tests'. 'Announcements-Core-Tests'. 'System-Platforms-Tests'.
-					 'Files-Tests'. 'SystemFinalization'. 'Zinc-Character-Encoding-Tests'. 'System-Time-Tests' } ]
+					 'Files-Tests'. 'SystemFinalization'. 'Zinc-Character-Encoding-Tests'. 'System-Time-Tests' . 'Hermes-Extensions-Tests' . 'System-Version-Tests' } ]
 ]
