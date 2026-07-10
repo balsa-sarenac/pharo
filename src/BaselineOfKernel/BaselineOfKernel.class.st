@@ -65,12 +65,13 @@ BaselineOfKernel >> baseline: spec [
 						loads: #( 'Tests' ) ];
 				
 				
-				baseline: #SystemVersion with: [
+				baseline: 'SystemVersion' with: [
 					spec
+						className: 'BaselineOfSystemVersion';
 						repository: repository;
 						loads: 'Core' ];
-				project: #SystemVersionTests
-					copyFrom: #SystemVersion
+				project: 'SystemVersionTests'
+					copyFrom: 'SystemVersion'
 					with: [ spec loads: 'Tests' ];
 
 				package: 'Announcements-Core';
