@@ -21,12 +21,12 @@ BaselineOfClap >> baseline: spec [
 			package: 'Clap-Tests' with: [ spec requires: #( 'Clap-Core' 'Clap-Examples' ) ];
 			package: 'Clap-UI-Tests' with: [ spec requires: #( 'Clap-UI' 'Clap-Examples' ) ];
 			
-			group: 'default' with: #( core development );
-			group: 'core' with: #( 'Clap-Core' );
-			group: 'pharo' with: #( 'Clap-Commands-Pharo' );
-			group: 'examples' with: #( 'Clap-Examples' );
-			group: 'tests' with: #( 'Clap-Tests' );
-			group: 'development' with: #( core pharo examples tests) ;
-			group: 'ui' with: #( 'Clap-UI' 'Clap-UI-Tests' ) ]
+			group: 'default' with: #( Core Development );
+			group: 'Core' with: #( 'Clap-Core' );
+			group: 'Pharo' with: #( 'Clap-Commands-Pharo' );
+			group: 'Examples' with: #( 'Clap-Examples' );
+			group: 'Tests' with: #( 'Clap-Tests' );
+			group: 'Development' with: #( Core Pharo Examples Tests) ;
+			group: 'Ui' with: #( 'Clap-UI' 'Clap-UI-Tests' ) ]
 
 ]
