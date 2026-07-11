@@ -32,6 +32,6 @@ BaselineOfClap >> baseline: spec [
 			group: 'Examples' with: #( 'Clap-Examples' );
 			group: 'Tests' with: #( 'Clap-Tests' );
 			group: 'Development' with: #( Core Pharo Examples Tests) ;
-			group: 'Ui' with: #( 'Clap-UI' 'Clap-UI-Tests' ) ]
+			group: 'UI' with: #( 'Clap-UI' 'Clap-UI-Tests' ) ]
 
 ]
