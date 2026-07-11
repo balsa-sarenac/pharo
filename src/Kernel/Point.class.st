@@ -254,13 +254,6 @@ Point >> crossProduct: aPoint [
 	^ (x * aPoint y) - (y * aPoint x)
 ]
 
-{ #category : 'copying' }
-Point >> deepCopy [
-	"Implemented here for better performance."
-
-	^ x deepCopy @ y deepCopy
-]
-
 { #category : 'point functions' }
 Point >> directionToLineFrom: p1 to: p2 [
 	"Answer the direction of the line from the receiver position.

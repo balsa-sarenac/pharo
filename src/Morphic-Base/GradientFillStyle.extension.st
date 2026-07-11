@@ -27,7 +27,7 @@ GradientFillStyle >> beRadialGradientIn: aMorph [
 { #category : '*Morphic-Base-Balloon' }
 GradientFillStyle >> changeColorAt: rampIndex to: aColor [
 	| ramp |
-	ramp := colorRamp deepCopy.
+	ramp := colorRamp copy.
 	(ramp at: rampIndex) value: aColor.
 
 	colorRamp := ramp.
@@ -58,7 +58,7 @@ GradientFillStyle >> changeSecondColorIn: aMorph event: evt [
 { #category : '*Morphic-Base-Balloon' }
 GradientFillStyle >> copyWith: aColor atRamp: rampIndex [
 	| ramp |
-	ramp := colorRamp deepCopy.
+	ramp := colorRamp copy.
 	(ramp at: rampIndex) value: aColor.
 	^(self class ramp: ramp)
 			origin: self origin;

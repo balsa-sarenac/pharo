@@ -106,7 +106,7 @@ DebugPointIconStyler >> iconBlockEdit: dp [
 { #category : 'defaults' }
 DebugPointIconStyler >> iconFor: dp [
 	| icon |
-	icon := (self iconNamed: (self icon: dp)) deepCopy.
+	icon := (self iconNamed: (self icon: dp)) copy.
 	icon := self hasBehaviorIcon: icon dp: dp.
 	icon := self disableIcon: icon dp: dp.
 
