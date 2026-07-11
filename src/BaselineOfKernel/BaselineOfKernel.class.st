@@ -47,12 +47,12 @@ BaselineOfKernel >> baseline: spec [
 						className: 'BaselineOfSystemPlatforms';
 						repository: repository;
 						loads: #( 'Tests' ) ];
-				baseline: 'Collections-Tests' with: [ 
-					spec 
+				baseline: 'Collections-Tests' with: [
+					spec
 						className: 'BaselineOfCollections';
 						repository: repository;
 						loads: #('KernelTests') ];
-					
+
 				baseline: 'Announcements-Core-Tests' with: [
 					spec
 						className: 'BaselineOfAnnouncements';
@@ -63,15 +63,14 @@ BaselineOfKernel >> baseline: spec [
 					spec
 						repository: repository;
 						loads: #( 'Tests' ) ];
-				
-				
-				baseline: 'SystemVersion' with: [
+
+				baseline: 'System-Version' with: [
 					spec
 						className: 'BaselineOfSystemVersion';
 						repository: repository;
 						loads: 'Core' ];
-				project: 'SystemVersionTests'
-					copyFrom: 'SystemVersion'
+				project: 'System-Version-Tests'
+					copyFrom: 'System-Version'
 					with: [ spec loads: 'Tests' ];
 
 				package: 'Announcements-Core';
@@ -122,9 +121,9 @@ BaselineOfKernel >> baseline: spec [
 					'System-Finalization'. 'System-Platforms'. 'System-SessionManager'. 'System-Support'. 'Zinc-Character-Encoding-Core' };
 				group: 'AdditionalPackages'
 				with: { 'Clap-Core'. 'Clap-Commands-Pharo'. 'Hermes-Extensions'. 'NumberParser'. 'ReflectionMirrors-Primitives'.
-					'System-Time'. 'Math-Operations-Extensions'. 'System-NumberPrinting'. 'SystemVersion'. 'Multilingual-Encodings' };
+					'System-Time'. 'Math-Operations-Extensions'. 'System-NumberPrinting'. 'System-Version'. 'Multilingual-Encodings' };
 				group: 'Tests'
 				with:
 					{ 'Collections-Tests'. 'Kernel-Tests'. 'Kernel-CodeModel-Tests'. 'Announcements-Core-Tests'. 'System-Platforms-Tests'.
-					 'Files-Tests'. 'SystemFinalization'. 'Zinc-Character-Encoding-Tests'. 'System-Time-Tests' . 'Hermes-Extensions-Tests' . 'SystemVersionTests' } ]
+					 'Files-Tests'. 'SystemFinalization'. 'Zinc-Character-Encoding-Tests'. 'System-Time-Tests' . 'Hermes-Extensions-Tests' . 'System-Version-Tests' } ]
 ]
