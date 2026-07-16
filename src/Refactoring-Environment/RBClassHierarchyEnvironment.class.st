@@ -51,6 +51,12 @@ RBClassHierarchyEnvironment >> basisObjects [
 ]
 
 { #category : 'accessing' }
+RBClassHierarchyEnvironment >> class [
+
+	^ class
+]
+
+{ #category : 'accessing' }
 RBClassHierarchyEnvironment >> class: aClass [
 	class := aClass
 ]

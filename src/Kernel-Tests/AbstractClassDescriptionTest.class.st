@@ -9,6 +9,18 @@ Class {
 	#tag : 'Classes'
 }
 
+{ #category : 'accessing' }
+AbstractClassDescriptionTest >> class [
+
+	^ class
+]
+
+{ #category : 'accessing' }
+AbstractClassDescriptionTest >> class: anObject [
+
+	class := anObject
+]
+
 { #category : 'helpers' }
 AbstractClassDescriptionTest >> classNameForTests [
 
