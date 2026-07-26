@@ -11,6 +11,8 @@ RBPullUpInstanceVariableParametrizedTest class >> testParameters [
 	^ ParametrizedTestMatrix new
 		addCase: { #rbClass -> RePullUpInstanceVariableRefactoring .
 					  #constructor -> #variable:class: };
+		addCase: { #rbClass -> RBPullUpVariableTransformation .
+					  #constructor -> #instanceVariable:class: };
 		yourself
 ]
 
@@ -30,16 +32,35 @@ RBPullUpInstanceVariableParametrizedTest >> testFailurePullUpVariableNotDefined 
 
 { #category : 'tests' }
 RBPullUpInstanceVariableParametrizedTest >> testPullUpInstVar [
-	| refactoring |
+	| refactoring root firstChild secondChild |
+	model
+		defineClass: [ :aBuilder |
+			aBuilder
+				superclass: Object;
+				name: #PullUpInstanceVariableRoot;
+				package: #'Refactory-Test data' ];
+		defineClass: [ :aBuilder |
+			aBuilder
+				superclassName: #PullUpInstanceVariableRoot;
+				name: #PullUpInstanceVariableFirstChild;
+				slots: { #result };
+				package: #'Refactory-Test data' ];
+		defineClass: [ :aBuilder |
+			aBuilder
+				superclassName: #PullUpInstanceVariableRoot;
+				name: #PullUpInstanceVariableSecondChild;
+				slots: { #result };
+				package: #'Refactory-Test data' ].
 	refactoring := self createRefactoringWithModel: model andArguments:
-			{'result' . #RBLintRuleTestData}.
-	[self executeRefactoring: refactoring]
-		on: RBRefactoringWarning
-		do: [ :e | e resume ].
-	self assert: ((refactoring model classNamed: #RBLintRuleTestData)
+			{ 'result'. #PullUpInstanceVariableRoot }.
+	self executeRefactoring: refactoring.
+	root := refactoring model classNamed: #PullUpInstanceVariableRoot.
+	firstChild := refactoring model classNamed: #PullUpInstanceVariableFirstChild.
+	secondChild := refactoring model classNamed: #PullUpInstanceVariableSecondChild.
+	self assert: (root
 		directlyDefinesInstanceVariable: 'result').
-	self deny: ((refactoring model classNamed: #RBBasicLintRuleTestData)
+	self deny: (firstChild
 		directlyDefinesInstanceVariable: 'result').
-	self deny: ((refactoring model classNamed: #RBFooLintRuleTestData)
+	self deny: (secondChild
 		directlyDefinesInstanceVariable: 'result')
 ]
