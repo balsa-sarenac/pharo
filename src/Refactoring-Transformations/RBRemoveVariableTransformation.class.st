@@ -50,7 +50,7 @@ RBRemoveVariableTransformation >> applicabilityPreconditionsForInstanceVariable 
 	"For now only remove an instance variable that is locally defined in a class."
 	
 	^ { (ReDirectlyDefinesInstanceVariableCondition
-		   classNamed: class name
+		   class: class
 		   inModel: self model
 		   instanceVariables: { variableName }) }
 ]

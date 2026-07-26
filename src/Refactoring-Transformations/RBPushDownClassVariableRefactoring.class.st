@@ -25,16 +25,6 @@ RBPushDownClassVariableRefactoring >> breakingChangePreconditions [
 ]
 
 { #category : 'preconditions' }
-RBPushDownClassVariableRefactoring >> findDestinationClasses [
-
-	| classes |
-	classes := class withAllSubclasses reject: [ :each |
-		(each whichSelectorsReferToClassVariable: variableName) isEmpty
-			and: [ (each classSide whichSelectorsReferToClassVariable: variableName) isEmpty ] ].
-	^ classes
-]
-
-{ #category : 'preconditions' }
 RBPushDownClassVariableRefactoring >> preconditionHasNoReferences [
 
     ^ (ReSharedVariableHasReferencesInDefiningClass
