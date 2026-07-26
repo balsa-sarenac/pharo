@@ -28,6 +28,31 @@ RBRemoveClassParametrizedTest >> setUp [
 			package: #'Refactory-Test data' ]
 ]
 
+{ #category : 'failure tests' }
+RBRemoveClassParametrizedTest >> testApplicabilityPreconditionsExposeMissingClass [
+
+	| refactoring failedPreconditions |
+	refactoring := self createRefactoringWithModel: model andArguments:
+		              { { #DecoratorMissingClass } }.
+	refactoring prepareForExecution.
+
+	self
+		shouldnt: [
+			failedPreconditions := refactoring failedApplicabilityPreconditions ]
+		raise: MessageNotUnderstood.
+
+	self assert: failedPreconditions size equals: 1.
+	self assert:
+		(failedPreconditions first isKindOf: ReClassesExistCondition)
+]
+
+{ #category : 'failure tests' }
+RBRemoveClassParametrizedTest >> testFailureNonExistentClass [
+
+	self shouldFail: (self createRefactoringWithModel: model andArguments:
+			 { { #DecoratorMissingClass } })
+]
+
 { #category : 'tests' }
 RBRemoveClassParametrizedTest >> testRemoveUnreferencedLeafClass [
 

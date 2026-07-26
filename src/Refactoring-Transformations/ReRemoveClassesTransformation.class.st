@@ -87,7 +87,7 @@ ReRemoveClassesTransformation >> classNames: aClassNameCollection [
 ReRemoveClassesTransformation >> preconditionAreNotMeta [
 
 	^ ReClassesAreNotMetaClassCondition new
-		  classes: classesDictionary;
+		  classes: (classesDictionary values reject: [ :class | class isNil ]);
 		  message: 'Metaclasses can be removed. Remove their class.'
 ]
 
