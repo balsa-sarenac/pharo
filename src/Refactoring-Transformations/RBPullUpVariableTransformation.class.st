@@ -75,5 +75,4 @@ RBPullUpVariableTransformation >> variableDefinitionsInHierarchy [
 			isClassVariable
 				ifTrue: [ each isMeta not and: [ each directlyDefinesClassVariable: variableName ] ]
 				ifFalse: [ each directlyDefinesInstanceVariable: variableName ] ]
-		thenCollect: #name
 ]
