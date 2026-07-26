@@ -17,26 +17,27 @@ overriden from RBRemoveVariableTransformation and RBAddVariableAccessorTransform
 Class {
 	#name : 'RBPullUpVariableTransformation',
 	#superclass : 'RBCompositeVariableTransformation',
-	#category : 'Refactoring-Transformations-Model-Unused',
+	#category : 'Refactoring-Transformations-Model',
 	#package : 'Refactoring-Transformations',
-	#tag : 'Model-Unused'
+	#tag : 'Model'
 }
 
 { #category : 'preconditions' }
 RBPullUpVariableTransformation >> applicabilityPreconditions [
 
-	^ { (isClassVariable
-		   ifTrue: [
-			   (self definingClass hierarchyDefinesClassVariable: variableName)
-				   ifFalse: [
-				   self refactoringError: 'No subclass defines ' , variableName ].
-			   (RBCondition isMetaclass: self definingClass) not ]
-		   ifFalse: [
-			   RBCondition withBlock: [
-				   (self definingClass hierarchyDefinesInstanceVariable:
-					    variableName) ifFalse: [
-					   self refactoringError: 'No subclass defines ' , variableName ].
-				   true ] ]) }
+	^ isClassVariable
+		  ifTrue: [
+			  {
+				  (RBCondition isMetaclass: self definingClass) not.
+				  (ReHierarchyDefinesSharedVariableCondition new
+					   class: self definingClass;
+					   sharedVariables: { variableName };
+					   yourself) } ]
+		  ifFalse: [
+			  { (ReHierarchyDefinesInstanceVariableCondition new
+				    class: self definingClass;
+				    instanceVariables: { variableName };
+				    yourself) } ]
 ]
 
 { #category : 'executing' }
