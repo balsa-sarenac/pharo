@@ -64,3 +64,37 @@ RBPullUpInstanceVariableParametrizedTest >> testPullUpInstVar [
 	self deny: (secondChild
 		directlyDefinesInstanceVariable: 'result')
 ]
+
+{ #category : 'tests' }
+RBPullUpInstanceVariableParametrizedTest >> testPullUpInstVarOnMetaclass [
+	| refactoring root firstChild secondChild |
+	model
+		defineClass: [ :aBuilder |
+			aBuilder
+				superclass: Object;
+				name: #PullUpClassSideInstanceVariableRoot;
+				package: #'Refactory-Test data' ];
+		defineClass: [ :aBuilder |
+			aBuilder
+				superclassName: #PullUpClassSideInstanceVariableRoot;
+				name: #PullUpClassSideInstanceVariableFirstChild;
+				package: #'Refactory-Test data' ];
+		defineClass: [ :aBuilder |
+			aBuilder
+				superclassName: #PullUpClassSideInstanceVariableRoot;
+				name: #PullUpClassSideInstanceVariableSecondChild;
+				package: #'Refactory-Test data' ].
+	root := model classNamed: #PullUpClassSideInstanceVariableRoot.
+	firstChild := model classNamed: #PullUpClassSideInstanceVariableFirstChild.
+	secondChild := model classNamed: #PullUpClassSideInstanceVariableSecondChild.
+	firstChild classSide addInstanceVariable: #result.
+	secondChild classSide addInstanceVariable: #result.
+
+	refactoring := self createRefactoringWithModel: model andArguments:
+			{ #result. root classSide }.
+	self executeRefactoring: refactoring.
+
+	self assert: (root classSide directlyDefinesInstanceVariable: #result).
+	self deny: (firstChild classSide directlyDefinesInstanceVariable: #result).
+	self deny: (secondChild classSide directlyDefinesInstanceVariable: #result)
+]
