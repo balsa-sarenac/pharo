@@ -76,9 +76,9 @@ SHTextStyler >> braceStyleName [
 
 	| level |
 	level := braceLevel \\ self maximumImbricationStyleSupported.
-	^ (#brace , (level isZero
+	^ ('brace' , (level isZero
 		    ifTrue: [ '' ]
-		    ifFalse: [ level asString ])) asSymbol
+		    ifFalse: [ level asString ]))
 ]
 
 { #category : 'accessing' }
@@ -86,9 +86,9 @@ SHTextStyler >> bracketStyleName [
 
 	| level |
 	level := bracketLevel \\ self maximumImbricationStyleSupported.
-	^ (#block , (level isZero
+	^ ('block' , (level isZero
 		    ifTrue: [ '' ]
-		    ifFalse: [ level asString ])) asSymbol
+		    ifFalse: [ level asString ]))
 ]
 
 { #category : 'accessing' }
@@ -102,8 +102,8 @@ SHTextStyler >> formatIncompleteSelector: aSymbol [
 	(self representsASelector: aSymbol) ifTrue: [ ^ nil ].
 
 	^ (self class formatIncompleteIdentifiers and: [ self hasSymbolStartingBy: aSymbol ])
-		  ifTrue: [ #incompleteSelector ]
-		  ifFalse: [ #undefinedSelector ]
+		  ifTrue: [ 'incompleteSelector' ]
+		  ifFalse: [ 'undefinedSelector' ]
 ]
 
 { #category : 'testing' }
@@ -135,19 +135,19 @@ SHTextStyler >> isScripting: aBoolean [
 SHTextStyler >> literalStyleSymbol: aValue [
 
 	aValue isSymbol
-		ifTrue: [ ^ #symbol ].
+		ifTrue: [ ^ 'symbol' ].
 	aValue isString
-		ifTrue: [ ^ #string ].
+		ifTrue: [ ^ 'string' ].
 	aValue isCharacter
-		ifTrue: [ ^ #character ].
+		ifTrue: [ ^ 'character' ].
 	aValue isNumber
-		ifTrue: [ ^ #number ].
+		ifTrue: [ ^ 'number' ].
 	aValue == true
-		ifTrue: [ ^ #true ].
+		ifTrue: [ ^ 'true' ].
 	aValue == false
-		ifTrue: [ ^ #false ].
-	aValue ifNil: [ ^ #nil ].
-	^ #default
+		ifTrue: [ ^ 'false' ].
+	aValue ifNil: [ ^ 'nil' ].
+	^ 'default'
 ]
 
 { #category : 'accessing' }
@@ -162,9 +162,9 @@ SHTextStyler >> parenthesisStyleName [
 
 	| level |
 	level := parentheseLevel \\ self maximumImbricationStyleSupported.
-	^ (#parenthesis , (level isZero
+	^ ('parenthesis' , (level isZero
 		    ifTrue: [ '' ]
-		    ifFalse: [ level asString ])) asSymbol
+		    ifFalse: [ level asString ]))
 ]
 
 { #category : 'private' }
@@ -273,8 +273,8 @@ SHTextStyler >> styleParenthesisOf: aNode around: aBlock [
 SHTextStyler >> styleTempBars: aSequenceNode [
 	| tempBarAttribute |
 	tempBarAttribute := (aSequenceNode scope isNil or: [ aSequenceNode scope isMethodScope ])
-		ifTrue: [ #methodTempBar ]
-		ifFalse: [ #blockTempBar ].
+		ifTrue: [ 'methodTempBar' ]
+		ifFalse: [ 'blockTempBar' ].
 	aSequenceNode leftBar
 		ifNotNil: [ :pos | self addStyle: tempBarAttribute from: pos to: pos ].
 	aSequenceNode rightBar
@@ -296,13 +296,13 @@ SHTextStyler >> view: aViewOrMorph [
 { #category : 'visiting' }
 SHTextStyler >> visitAnnotationMarkNode: aAnnotationMarkNode [
 
-	self addStyle: #pragma from: aAnnotationMarkNode start to: aAnnotationMarkNode start.
+	self addStyle: 'pragma' from: aAnnotationMarkNode start to: aAnnotationMarkNode start.
 ]
 
 { #category : 'visiting' }
 SHTextStyler >> visitArrayNode: anArrayNode [
 
-	anArrayNode comments do: [ :comment | self addStyle: #comment from: comment start to: comment stop ].
+	anArrayNode comments do: [ :comment | self addStyle: 'comment' from: comment start to: comment stop ].
 	self styleOpenBrace: anArrayNode.
 	anArrayNode children do: [ :each | self visitNode: each ].
 	self styleCloseBrace: anArrayNode
@@ -313,19 +313,19 @@ SHTextStyler >> visitAssignmentNode: anAssignmentNode [
 	self visitNode: anAssignmentNode variable.
 	self visitNode: anAssignmentNode value.
 	anAssignmentNode variable binding isWritable
-		ifFalse: [ self addStyle: #invalid forNode: anAssignmentNode ]
+		ifFalse: [ self addStyle: 'invalid' forNode: anAssignmentNode ]
 ]
 
 { #category : 'visiting' }
 SHTextStyler >> visitBlockNode: aBlockNode [
 	aBlockNode comments
 		do:
-			[ :comment | self addStyle: #comment from: comment start to: comment stop ].
+			[ :comment | self addStyle: 'comment' from: comment start to: comment stop ].
 	aBlockNode arguments do: [ :argument | self visitNode: argument ].
 	aBlockNode bar
-		ifNotNil: [ :pos | self addStyle: #blockArgsBar from: pos to: pos ].
+		ifNotNil: [ :pos | self addStyle: 'blockArgsBar' from: pos to: pos ].
 	aBlockNode colons
-		do: [ :pos | self addStyle: #blockArgColon from: pos to: pos ].
+		do: [ :pos | self addStyle: 'blockArgColon' from: pos to: pos ].
 	self styleOpenBracket: aBlockNode.
 	self visitNode: aBlockNode body.
 	self styleCloseBracket: aBlockNode
@@ -334,16 +334,16 @@ SHTextStyler >> visitBlockNode: aBlockNode [
 { #category : 'visiting' }
 SHTextStyler >> visitCascadeNode: aCascadeNode [
 	aCascadeNode messages do: [ :each | self visitNode: each ].
-	aCascadeNode semicolons do: [ :pos | self addStyle: #cascadeSeparator from: pos to: pos ]
+	aCascadeNode semicolons do: [ :pos | self addStyle: 'cascadeSeparator' from: pos to: pos ]
 ]
 
 { #category : 'visiting' }
 SHTextStyler >> visitEnglobingErrorNode: anEnglobingErrorNode [
 
 	anEnglobingErrorNode value ifNotEmpty: [
-		self addStyle: #invalid from: anEnglobingErrorNode startWithoutParentheses to: anEnglobingErrorNode startWithoutParentheses + anEnglobingErrorNode value size - 1 ].
+		self addStyle: 'invalid' from: anEnglobingErrorNode startWithoutParentheses to: anEnglobingErrorNode startWithoutParentheses + anEnglobingErrorNode value size - 1 ].
 	anEnglobingErrorNode valueAfter ifNotEmpty: [
-		self addStyle: #invalid from: anEnglobingErrorNode stopWithoutParentheses to: anEnglobingErrorNode stopWithoutParentheses + anEnglobingErrorNode valueAfter size - 1 ].
+		self addStyle: 'invalid' from: anEnglobingErrorNode stopWithoutParentheses to: anEnglobingErrorNode stopWithoutParentheses + anEnglobingErrorNode valueAfter size - 1 ].
 	anEnglobingErrorNode contents do: [:each | self visitNode: each ]
 ]
 
@@ -389,7 +389,7 @@ SHTextStyler >> visitMethodNode: aMethodNode [
 			do:
 				[ :keyword :position |
 				self
-					addStyle: #patternSelector
+					addStyle: 'patternSelector'
 					attribute: link
 					from: position
 					to: position + keyword size - 1 ] ].
@@ -400,7 +400,7 @@ SHTextStyler >> visitMethodNode: aMethodNode [
 { #category : 'visiting' }
 SHTextStyler >> visitNode: aNode [
 
-	aNode comments do: [ :comment | self addStyle: #comment from: comment start to: comment stop ].
+	aNode comments do: [ :comment | self addStyle: 'comment' from: comment start to: comment stop ].
 
 	^ self styleParenthesisOf: aNode around: [ aNode acceptVisitor: self ]
 ]
@@ -408,7 +408,7 @@ SHTextStyler >> visitNode: aNode [
 { #category : 'visiting' }
 SHTextStyler >> visitParseErrorNode: anErrorNode [
 
-	self addStyle: #invalid forNode: anErrorNode
+	self addStyle: 'invalid' forNode: anErrorNode
 ]
 
 { #category : 'visiting' }
@@ -417,9 +417,9 @@ SHTextStyler >> visitPragmaNode: aPragmaNode [
 
 	We want to highlight the `<`, the `test:`, the `test2:` and the `>` but we do not want to highlight the arguments."
 
-	self addStyle: #pragma from: aPragmaNode left to: aPragmaNode left.
-	aPragmaNode keywordsIntervals do: [ :i | self addStyle: #pragma from: i first to: i last ].
-	self addStyle: #pragma from: aPragmaNode right to: aPragmaNode right.
+	self addStyle: 'pragma' from: aPragmaNode left to: aPragmaNode left.
+	aPragmaNode keywordsIntervals do: [ :i | self addStyle: 'pragma' from: i first to: i last ].
+	self addStyle: 'pragma' from: aPragmaNode right to: aPragmaNode right.
 
 	aPragmaNode arguments do: [ :each | self visitNode: each ]
 ]
@@ -427,7 +427,7 @@ SHTextStyler >> visitPragmaNode: aPragmaNode [
 { #category : 'visiting' }
 SHTextStyler >> visitReturnNode: aReturnNode [
 
-	self addStyle: #return from: aReturnNode start to: aReturnNode start.
+	self addStyle: 'return' from: aReturnNode start to: aReturnNode start.
 
 	self visitNode: aReturnNode value
 ]
@@ -438,7 +438,7 @@ SHTextStyler >> visitSequenceNode: aSequenceNode [
 	self styleTempBars: aSequenceNode.
 	aSequenceNode temporaries do: [ :each | self visitNode: each ].
 	aSequenceNode statements do: [ :each | self visitNode: each ].
-	aSequenceNode periods do: [ :pos | self addStyle: #statementSeparator from: pos to: pos ]
+	aSequenceNode periods do: [ :pos | self addStyle: 'statementSeparator' from: pos to: pos ]
 ]
 
 { #category : 'visiting' }
