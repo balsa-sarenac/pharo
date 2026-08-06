@@ -34,7 +34,7 @@ RBVariableRefactoring class >> variable: aVarName class: aClass [
 ]
 
 { #category : 'accessing' }
-RBVariableRefactoring >> class [
+RBVariableRefactoring >> refactoredClass [
 
 	^ class
 ]

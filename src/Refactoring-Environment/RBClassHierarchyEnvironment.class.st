@@ -50,17 +50,6 @@ RBClassHierarchyEnvironment >> basisObjects [
 	^ { class }
 ]
 
-{ #category : 'accessing' }
-RBClassHierarchyEnvironment >> class [
-
-	^ class
-]
-
-{ #category : 'accessing' }
-RBClassHierarchyEnvironment >> class: aClass [
-	class := aClass
-]
-
 { #category : 'testing' }
 RBClassHierarchyEnvironment >> definesClass: aClass [
 	^ (aClass == class or:
@@ -85,4 +74,15 @@ RBClassHierarchyEnvironment >> includesClass: aClass [
 	^ (aClass == class or:
 		[ (class inheritsFrom: aClass) or:
 			[ aClass inheritsFrom: class ] ]) and: [super includesClass: aClass]
+]
+
+{ #category : 'accessing' }
+RBClassHierarchyEnvironment >> refactoredClass [
+
+	^ class
+]
+
+{ #category : 'accessing' }
+RBClassHierarchyEnvironment >> refactoredClass: aClass [
+	class := aClass
 ]
