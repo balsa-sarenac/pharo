@@ -34,7 +34,7 @@ FTFilterFunction >> colorText: aText [
 
 { #category : 'accessing' }
 FTFilterFunction >> field [
-	^field
+	^ field
 ]
 
 { #category : 'updating' }
@@ -73,7 +73,7 @@ FTFilterFunction >> ghostText [
 
 { #category : 'accessing' }
 FTFilterFunction >> initialDataSource [
-	^initialDataSource
+	^ initialDataSource
 ]
 
 { #category : 'accessing' }

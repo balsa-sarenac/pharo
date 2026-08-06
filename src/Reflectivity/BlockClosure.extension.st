@@ -25,7 +25,7 @@ BlockClosure >> rfvalue [
 	 temps. Primitive. Essential."
 
 	<primitive: 207>
-	<metaLinkOptions: #( #+ optionDisabledLink )>
+	<metaLinkOptions: #( + optionDisabledLink )>
 	| newContext |
 	self numArgs ~= 0 ifTrue: [ self numArgsError: 0 ].
 	false
@@ -40,7 +40,7 @@ BlockClosure >> rfvalueNoContextSwitch [
 	"same as valueNoContextSwitch, for recursion stopping metalinks"
 
 	<primitive: 209>
-	<metaLinkOptions: #( #+ optionDisabledLink )>
+	<metaLinkOptions: #( + optionDisabledLink )>
 	self numArgs ~= 0 ifTrue: [ self numArgsError: 0 ].
 	self primitiveFailed
 ]

@@ -78,7 +78,8 @@ ScopedSelector >> bindAliasIn: aClass [
 	existingMethod := aClass methodDict at: self symbol ifAbsent: [ nil ].
 	isLegacyExtension := Extension allowMigration and: [existingMethod notNil and: [ existingMethod isExtension ] ].
 
-	locallyDefined := (aClass includesSelector: self symbol) and: [ isLegacyExtension not ].methodsInConflict := locallyDefined
+	locallyDefined := (aClass includesSelector: self symbol) and: [ isLegacyExtension not ].
+	methodsInConflict := locallyDefined
 		ifTrue: [ 1 ]
 		ifFalse: [ 0 ].
 	methodsInConflict := methodsInConflict + allVisibleExtensionsForThisClass size.
