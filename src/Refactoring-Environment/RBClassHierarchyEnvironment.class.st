@@ -50,6 +50,11 @@ RBClassHierarchyEnvironment >> basisObjects [
 	^ { class }
 ]
 
+{ #category : 'accessing' }
+RBClassHierarchyEnvironment >> class: aClass [
+	class := aClass
+]
+
 { #category : 'testing' }
 RBClassHierarchyEnvironment >> definesClass: aClass [
 	^ (aClass == class or:
@@ -80,9 +85,4 @@ RBClassHierarchyEnvironment >> includesClass: aClass [
 RBClassHierarchyEnvironment >> refactoredClass [
 
 	^ class
-]
-
-{ #category : 'accessing' }
-RBClassHierarchyEnvironment >> refactoredClass: aClass [
-	class := aClass
 ]
