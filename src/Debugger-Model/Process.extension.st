@@ -80,7 +80,7 @@ Process >> return: aContext value: value [
 	"Pop thread down to aContext's sender.  Execute any unwind blocks on the way.  See #popTo: comment and #runUntilErrorOrReturnFrom: for more details."
 
 	self suspendedContext == aContext ifTrue: [
-		^ Processor activeProcess evaluate: [ self suspendedContext: (aContext return: value from: aContext) ] onBehalfOf: self ].
+		^ Processor activeProcess evaluate: [ self suspendedContext: (aContext return: value from: aContext). self suspendedContext ] onBehalfOf: self ].
 	self activateReturn: aContext value: value.
 	^ self complete: aContext
 ]
