@@ -240,14 +240,16 @@ SystemNavigation >> allPrimitiveMethods [
 { #category : 'query' }
 SystemNavigation >> allReferencesTo: aLiteral [
 	"Answer all the methods that refer to aLiteral even deeply embedded in literal array."
-	
+
 	| specialIndex |
 	"for speed we check the special selectors here once per class"
 	^ self allBehaviors flatCollect: [ :class |
-			  | targetLiteral |
-			  targetLiteral := class package visibleSelectorForSymbol: aLiteral.
-			  specialIndex := Smalltalk specialSelectorIndexOrNil: aLiteral.
-			  class thoroughWhichMethodsReferTo: targetLiteral specialIndex: specialIndex ]
+			| targetLiteral |
+			targetLiteral := aLiteral.
+			(targetLiteral isKindOf: Symbol) ifTrue: [ 
+				targetLiteral := class package visibleSelectorForSymbol: aLiteral ].
+			specialIndex := Smalltalk specialSelectorIndexOrNil: aLiteral.
+			class thoroughWhichMethodsReferTo: targetLiteral specialIndex: specialIndex ]
 ]
 
 { #category : 'query' }

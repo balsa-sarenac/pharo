@@ -5,7 +5,7 @@ Class {
 		'extendedClass',
 		'userPackages'
 	],
-	#classInstVars : [
+	#classVars : [
 		'AllowMigration'
 	],
 	#category : 'Kernel-CodeModel-Extensions',

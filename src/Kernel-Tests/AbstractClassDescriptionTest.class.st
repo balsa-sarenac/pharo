@@ -9,18 +9,6 @@ Class {
 	#tag : 'Classes'
 }
 
-{ #category : 'accessing' }
-AbstractClassDescriptionTest >> class [
-
-	^ class
-]
-
-{ #category : 'accessing' }
-AbstractClassDescriptionTest >> class: anObject [
-
-	class := anObject
-]
-
 { #category : 'helpers' }
 AbstractClassDescriptionTest >> classNameForTests [
 
@@ -48,4 +36,16 @@ AbstractClassDescriptionTest >> tearDown [
 
 	self packageOrganizer removePackage: self packageNameForTests.
 	super tearDown
+]
+
+{ #category : 'accessing' }
+AbstractClassDescriptionTest >> testedClass [
+
+	^ class
+]
+
+{ #category : 'accessing' }
+AbstractClassDescriptionTest >> testedClass: anObject [
+
+	class := anObject
 ]
