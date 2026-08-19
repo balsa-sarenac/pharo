@@ -20,6 +20,25 @@ Class {
 	#package : 'Morphic-Widgets-Taskbar'
 }
 
+{ #category : 'drag and drop' }
+TaskbarItemMorph >> acceptDroppingMorph: aTransferMorph event: event [
+	"The user dropped a task onto this button. Reorder the taskbar."
+
+	| droppedTask targetIndex taskbar currentIndex |
+	droppedTask := aTransferMorph passenger.
+	droppedTask ifNil: [ ^ self ].
+	taskbar := self owner.
+	taskbar ifNil: [ ^ self ].
+	(taskbar isKindOf: TaskbarMorph) ifFalse: [ ^ self ].
+	currentIndex := taskbar orderedTasks indexOf: droppedTask.
+	currentIndex = 0 ifTrue: [ ^ self ].
+	targetIndex := taskbar orderedTasks
+		indexOf: self model taskbarTask
+		ifAbsent: [ ^ self ].
+	taskbar moveTask: droppedTask toIndex: targetIndex.
+	event hand releaseMouseFocus: self
+]
+
 { #category : 'customization' }
 TaskbarItemMorph >> addEmphaseTo: lab [
 	"1 -> bold"
@@ -33,6 +52,13 @@ TaskbarItemMorph >> addEmphaseTo: lab [
 TaskbarItemMorph >> buildLabelMorph [
 
 	^ self theme buttonLabelForText: self model taskbarLabel
+]
+
+{ #category : 'drag and drop' }
+TaskbarItemMorph >> click: event [
+	"The user clicked (short press) on this button. Activate or minimize the window."
+
+	self performAction: event
 ]
 
 { #category : 'style - border' }
@@ -95,6 +121,43 @@ TaskbarItemMorph >> initializeFor: aTaskbar [
 			(self model isCollapsed
 				ifTrue: [ self theme taskbarItemLabelColorForCollapsed: self ]
 				ifFalse: [ self theme taskbarItemLabelColorForExpanded: self ])
+]
+
+{ #category : 'drag and drop' }
+TaskbarItemMorph >> mouseDown: event [
+	"Set up click-or-drag handling. A short click activates the window;
+	a drag beyond the threshold initiates task reordering."
+
+	event yellowButtonPressed ifTrue: [ ^ super mouseDown: event ].
+	event hand
+		waitForClicksOrDrag: self
+		event: event
+		selectors: #( click: doubleClick: doubleClickTimeout: startDrag: )
+		threshold: 5
+]
+
+{ #category : 'drag and drop' }
+TaskbarItemMorph >> mouseEnterDragging: event [
+	"The hand is dragging a morph over us. Highlight as potential drop target."
+
+	| taskbar draggedTask myTask |
+	taskbar := self owner.
+	(taskbar isKindOf: TaskbarMorph) ifFalse: [ ^ self ].
+	draggedTask := event hand submorphs
+		ifEmpty: [ ^ self ]
+		ifNotEmpty: [ :morphs | morphs first passenger ].
+	(draggedTask isKindOf: TaskbarTask) ifFalse: [ ^ self ].
+	myTask := self model taskbarTask.
+	myTask ifNil: [ ^ self ].
+	draggedTask = myTask ifTrue: [ ^ self ].
+	self highlightForDrop: true
+]
+
+{ #category : 'drag and drop' }
+TaskbarItemMorph >> mouseLeaveDragging: event [
+	"The hand left us while dragging. Remove drop highlight."
+
+	self resetHighlightForDrop
 ]
 
 { #category : 'style - border' }
@@ -193,6 +256,30 @@ TaskbarItemMorph >> selectedPressedFillStyle [
 	"Return the selected pressed fillStyle of the receiver."
 
 	^ self theme taskbarItemSelectedPressedFillStyleFor: self
+]
+
+{ #category : 'drag and drop' }
+TaskbarItemMorph >> startDrag: event [
+	"Initiate a drag operation. Create a TransferMorph carrying the TaskbarTask."
+
+	| taskbar task transferMorph |
+	taskbar := self owner.
+	taskbar ifNil: [ ^ self ].
+	(taskbar isKindOf: TaskbarMorph) ifFalse: [ ^ self ].
+	task := taskbar taskOf: self model.
+	task ifNil: [ ^ self ].
+	transferMorph := TransferMorph withPassenger: task from: self.
+	transferMorph align: transferMorph center with: event position.
+	event hand grabMorph: transferMorph.
+	event hand releaseMouseFocus: self
+]
+
+{ #category : 'drag and drop' }
+TaskbarItemMorph >> wantsDroppedMorph: aMorph event: event [
+	"Accept drops only from TransferMorph carrying a TaskbarTask."
+
+	(aMorph isKindOf: TransferMorph) ifFalse: [ ^ false ].
+	^ aMorph passenger isKindOf: TaskbarTask
 ]
 
 { #category : 'menu' }

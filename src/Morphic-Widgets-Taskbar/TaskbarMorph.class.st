@@ -167,6 +167,7 @@ TaskbarMorph >> initialize [
 	self
 		initializeLayout;
 		initializeAppearance;
+		dropEnabled: true;
 		tasks: #();
 		orderedTasks: OrderedCollection new
 ]
@@ -277,6 +278,22 @@ TaskbarMorph >> move: task withOffset: offset [
 	^ self updateTaskButtons
 ]
 
+{ #category : 'taskbar' }
+TaskbarMorph >> moveTask: aTask toIndex: targetIndex [
+	"Move aTask to the given index in orderedTasks. Used by drag-and-drop."
+
+	| currentIndex newOrderedTasks |
+	currentIndex := self orderedTasks indexOf: aTask.
+	currentIndex = 0 ifTrue: [ ^ self ].
+	currentIndex = targetIndex ifTrue: [ ^ self ].
+	newOrderedTasks := self orderedTasks copy.
+	newOrderedTasks removeAt: currentIndex.
+	newOrderedTasks add: aTask beforeIndex: (targetIndex min: newOrderedTasks size + 1).
+	self orderedTasks: newOrderedTasks.
+	self resetDropIndicator.
+	self updateTaskButtons
+]
+
 { #category : 'accessing' }
 TaskbarMorph >> orderedTasks [
 	"Answer the value of orderedTasks"
@@ -310,6 +327,13 @@ TaskbarMorph >> rejectsEvent: anEvent [
 	(anEvent isMouse and: [ anEvent isMouseDown ]) ifTrue: [ ^ (self submorphs anySatisfy: [ :each | each containsPoint: anEvent cursorPoint ]) not ].
 
 	^ super rejectsEvent: anEvent
+]
+
+{ #category : 'drag and drop' }
+TaskbarMorph >> resetDropIndicator [
+	"Remove drop highlight from all task buttons."
+
+	self submorphs do: [ :m | m resetHighlightForDrop ]
 ]
 
 { #category : 'taskbar' }
