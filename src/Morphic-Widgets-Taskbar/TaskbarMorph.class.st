@@ -139,6 +139,26 @@ TaskbarMorph >> displayExtentChanged [
 	self updateBounds
 ]
 
+{ #category : 'drag and drop' }
+TaskbarMorph >> dropIndicatorIndexForX: mouseX [
+	"Answer the submorph index before which to place the drop indicator,
+	based on mouseX compared to button positions. Ignores y-position."
+
+	| buttons |
+	buttons := self submorphs reject: [ :m | m = dropIndicator ].
+	buttons ifEmpty: [ ^ 1 ].
+	buttons doWithIndex: [ :btn :i |
+		| center |
+		center := btn center x.
+		mouseX < center ifTrue: [ ^ i ] ].
+	^ buttons size + 1
+]
+
+{ #category : 'drag and drop' }
+TaskbarMorph >> dropTargetIndex [
+	^ dropTargetIndex
+]
+
 { #category : 'private - accessing' }
 TaskbarMorph >> edgeToAdhereTo [
 	"Must implement. Answer #bottom."
@@ -257,33 +277,6 @@ TaskbarMorph >> minimumExtent [
 	^40@25
 ]
 
-{ #category : 'drag and drop' }
-TaskbarMorph >> step [
-	"If the hand is dragging a TaskbarTask, update the drop indicator
-	from the mouse x-position regardless of y.
-	Otherwise, clean up any leftover indicator."
-
-	| hand isDragging idx |
-	self world ifNil: [ ^ self ].
-	hand := self world activeHand.
-	hand ifNil: [ ^ self ].
-	isDragging := hand submorphs anySatisfy: [ :sms |
-		(sms isKindOf: TransferMorph) and: [
-			sms passenger isKindOf: TaskbarTask ]].
-	isDragging ifFalse: [
-		dropIndicator ifNotNil: [ self removeDropIndicator ].
-		^ self ].
-	self submorphs ifEmpty: [ ^ self ].
-	idx := self dropIndicatorIndexForX: hand cursorPoint x.
-	idx = dropTargetIndex ifTrue: [ ^ self ].
-	self showDropIndicatorAfterIndex: idx - 1
-]
-
-{ #category : 'geometry' }
-TaskbarMorph >> stepTime [
-	^ 50
-]
-
 { #category : 'wiw support' }
 TaskbarMorph >> morphicLayerNumber [
 	"Helpful for ensuring some morphs always appear in front of or
@@ -362,48 +355,12 @@ TaskbarMorph >> rejectsEvent: anEvent [
 ]
 
 { #category : 'drag and drop' }
-TaskbarMorph >> dropIndicatorIndexForX: mouseX [
-	"Answer the submorph index before which to place the drop indicator,
-	based on mouseX compared to button positions. Ignores y-position."
-
-	| buttons |
-	buttons := self submorphs reject: [ :m | m = dropIndicator ].
-	buttons ifEmpty: [ ^ 1 ].
-	buttons doWithIndex: [ :btn :i |
-		| center |
-		center := btn center x.
-		mouseX < center ifTrue: [ ^ i ] ].
-	^ buttons size + 1
-]
-
-{ #category : 'drag and drop' }
-TaskbarMorph >> dropTargetIndex [
-	^ dropTargetIndex
-]
-
-{ #category : 'drag and drop' }
 TaskbarMorph >> removeDropIndicator [
 	"Remove the drop indicator bar."
 
 	dropIndicator ifNotNil: [ :ind | ind delete ].
 	dropIndicator := nil.
 	dropTargetIndex := nil
-]
-
-{ #category : 'drag and drop' }
-TaskbarMorph >> showDropIndicatorAfterIndex: anInteger [
-	"Show a thin vertical bar after the button at the given submorph index."
-
-	| btnHeight |
-	self removeDropIndicator.
-	self submorphs ifEmpty: [ ^ self ].
-	btnHeight := self submorphs first height.
-	dropIndicator := Morph new
-		color: Color blue;
-		extent: 4 @ btnHeight;
-		yourself.
-	dropTargetIndex := anInteger + 1.
-	self addMorph: dropIndicator asElementNumber: dropTargetIndex
 ]
 
 { #category : 'taskbar' }
@@ -422,9 +379,52 @@ TaskbarMorph >> removeFromWorld [
 	mins do: [ :t | t morph minimize ]
 ]
 
+{ #category : 'drag and drop' }
+TaskbarMorph >> showDropIndicatorAfterIndex: anInteger [
+	"Show a thin vertical bar after the button at the given submorph index."
+
+	| btnHeight |
+	self removeDropIndicator.
+	self submorphs ifEmpty: [ ^ self ].
+	btnHeight := self submorphs first height.
+	dropIndicator := Morph new
+		                 color: (self theme taskbarItemLabelColorForExpanded: self);
+		                 extent: 4 @ btnHeight;
+		                 yourself.
+	dropTargetIndex := anInteger + 1.
+	self addMorph: dropIndicator asElementNumber: dropTargetIndex
+]
+
 { #category : 'setting' }
 TaskbarMorph >> showWindowPreview [
 	^ self class showWindowPreview
+]
+
+{ #category : 'drag and drop' }
+TaskbarMorph >> step [
+	"If the hand is dragging a TaskbarTask, update the drop indicator
+	from the mouse x-position regardless of y.
+	Otherwise, clean up any leftover indicator."
+
+	| hand isDragging idx |
+	self world ifNil: [ ^ self ].
+	hand := self world activeHand.
+	hand ifNil: [ ^ self ].
+	isDragging := hand submorphs anySatisfy: [ :sms |
+		(sms isKindOf: TransferMorph) and: [
+			sms passenger isKindOf: TaskbarTask ]].
+	isDragging ifFalse: [
+		dropIndicator ifNotNil: [ self removeDropIndicator ].
+		^ self ].
+	self submorphs ifEmpty: [ ^ self ].
+	idx := self dropIndicatorIndexForX: hand cursorPoint x.
+	idx = dropTargetIndex ifTrue: [ ^ self ].
+	self showDropIndicatorAfterIndex: idx - 1
+]
+
+{ #category : 'geometry' }
+TaskbarMorph >> stepTime [
+	^ 50
 ]
 
 { #category : 'taskbar' }
