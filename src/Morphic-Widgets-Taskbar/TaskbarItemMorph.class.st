@@ -155,15 +155,6 @@ TaskbarItemMorph >> mouseEnterDragging: event [
 		ifFalse: [ taskbar showDropIndicatorAfterIndex: idx ]
 ]
 
-{ #category : 'drag and drop' }
-TaskbarItemMorph >> mouseLeaveDragging: event [
-	"The hand left us while dragging. Remove drop indicator."
-
-	| taskbar |
-	taskbar := self owner.
-	(taskbar isKindOf: TaskbarMorph) ifTrue: [ taskbar removeDropIndicator ]
-]
-
 { #category : 'style - border' }
 TaskbarItemMorph >> mouseOverBorderStyle [
 	"Return the mouse over borderStyle of the receiver."

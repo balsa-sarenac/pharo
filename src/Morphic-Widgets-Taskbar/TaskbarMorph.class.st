@@ -257,6 +257,33 @@ TaskbarMorph >> minimumExtent [
 	^40@25
 ]
 
+{ #category : 'drag and drop' }
+TaskbarMorph >> step [
+	"If the hand is dragging a TaskbarTask, update the drop indicator
+	from the mouse x-position regardless of y.
+	Otherwise, clean up any leftover indicator."
+
+	| hand isDragging idx |
+	self world ifNil: [ ^ self ].
+	hand := self world activeHand.
+	hand ifNil: [ ^ self ].
+	isDragging := hand submorphs anySatisfy: [ :sms |
+		(sms isKindOf: TransferMorph) and: [
+			sms passenger isKindOf: TaskbarTask ]].
+	isDragging ifFalse: [
+		dropIndicator ifNotNil: [ self removeDropIndicator ].
+		^ self ].
+	self submorphs ifEmpty: [ ^ self ].
+	idx := self dropIndicatorIndexForX: hand cursorPoint x.
+	idx = dropTargetIndex ifTrue: [ ^ self ].
+	self showDropIndicatorAfterIndex: idx - 1
+]
+
+{ #category : 'geometry' }
+TaskbarMorph >> stepTime [
+	^ 50
+]
+
 { #category : 'wiw support' }
 TaskbarMorph >> morphicLayerNumber [
 	"Helpful for ensuring some morphs always appear in front of or
@@ -332,6 +359,21 @@ TaskbarMorph >> rejectsEvent: anEvent [
 	(anEvent isMouse and: [ anEvent isMouseDown ]) ifTrue: [ ^ (self submorphs anySatisfy: [ :each | each containsPoint: anEvent cursorPoint ]) not ].
 
 	^ super rejectsEvent: anEvent
+]
+
+{ #category : 'drag and drop' }
+TaskbarMorph >> dropIndicatorIndexForX: mouseX [
+	"Answer the submorph index before which to place the drop indicator,
+	based on mouseX compared to button positions. Ignores y-position."
+
+	| buttons |
+	buttons := self submorphs reject: [ :m | m = dropIndicator ].
+	buttons ifEmpty: [ ^ 1 ].
+	buttons doWithIndex: [ :btn :i |
+		| center |
+		center := btn center x.
+		mouseX < center ifTrue: [ ^ i ] ].
+	^ buttons size + 1
 ]
 
 { #category : 'drag and drop' }
@@ -456,7 +498,6 @@ TaskbarMorph >> updateTaskButtons [
 	"Make buttons for the ordered tasks."
 
 	| oldButtons size |
-	self removeDropIndicator.
 	oldButtons := self submorphs copy.
 	self removeAllMorphs.
 	self defer: [ oldButtons do: [ :b | b model: nil ] ]. "release dependency after event handling"
