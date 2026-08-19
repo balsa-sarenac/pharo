@@ -9,7 +9,8 @@ Class {
 		'tasks',
 		'orderedTasks',
 		'dropIndicator',
-		'dropTargetIndex'
+		'dropTargetIndex',
+		'lastDraggedTask'
 	],
 	#classVars : [
 		'MaximumButtons',
@@ -152,11 +153,6 @@ TaskbarMorph >> dropIndicatorIndexForX: mouseX [
 		center := btn center x.
 		mouseX < center ifTrue: [ ^ i ] ].
 	^ buttons size + 1
-]
-
-{ #category : 'drag and drop' }
-TaskbarMorph >> dropTargetIndex [
-	^ dropTargetIndex
 ]
 
 { #category : 'private - accessing' }
@@ -315,7 +311,6 @@ TaskbarMorph >> moveTask: aTask toIndex: targetIndex [
 		ifFalse: [ targetIndex ].
 	newOrderedTasks add: aTask beforeIndex: (adjustedIndex clampBetween: 1 and: newOrderedTasks size + 1).
 	self orderedTasks: newOrderedTasks.
-	self removeDropIndicator.
 	self updateTaskButtons
 ]
 
@@ -404,19 +399,31 @@ TaskbarMorph >> showWindowPreview [
 TaskbarMorph >> step [
 	"If the hand is dragging a TaskbarTask, update the drop indicator
 	from the mouse x-position regardless of y.
-	Otherwise, clean up any leftover indicator."
+	When the drag ends, perform the move."
 
-	| hand isDragging idx |
+	| hand isDragging task idx |
 	self world ifNil: [ ^ self ].
 	hand := self world activeHand.
 	hand ifNil: [ ^ self ].
+	task := nil.
 	isDragging := hand submorphs anySatisfy: [ :sms |
 		(sms isKindOf: TransferMorph) and: [
-			sms passenger isKindOf: TaskbarTask ]].
+			(sms passenger isKindOf: TaskbarTask)
+				ifTrue: [ task := sms passenger. true ]
+				ifFalse: [ false ] ]].
 	isDragging ifFalse: [
-		dropIndicator ifNotNil: [ self removeDropIndicator ].
+		(dropIndicator notNil and: [ lastDraggedTask notNil and: [ dropTargetIndex notNil ] ])
+			ifTrue: [
+				| idx |
+				idx := dropTargetIndex.
+				self removeDropIndicator.
+				self moveTask: lastDraggedTask toIndex: idx ]
+			ifFalse: [
+				self removeDropIndicator ].
+		lastDraggedTask := nil.
 		^ self ].
 	self submorphs ifEmpty: [ ^ self ].
+	lastDraggedTask := task.
 	idx := self dropIndicatorIndexForX: hand cursorPoint x.
 	idx = dropTargetIndex ifTrue: [ ^ self ].
 	self showDropIndicatorAfterIndex: idx - 1

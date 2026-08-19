@@ -20,22 +20,6 @@ Class {
 	#package : 'Morphic-Widgets-Taskbar'
 }
 
-{ #category : 'drag and drop' }
-TaskbarItemMorph >> acceptDroppingMorph: aTransferMorph event: event [
-	"The user dropped a task. Move it to the indicator position."
-
-	| taskbar droppedTask targetIdx |
-	taskbar := self owner.
-	taskbar ifNil: [ ^ self ].
-	(taskbar isKindOf: TaskbarMorph) ifFalse: [ ^ self ].
-	droppedTask := aTransferMorph passenger.
-	droppedTask ifNil: [ ^ self ].
-	targetIdx := taskbar dropTargetIndex.
-	targetIdx ifNil: [ ^ self ].
-	taskbar moveTask: droppedTask toIndex: targetIdx.
-	event hand releaseMouseFocus: self
-]
-
 { #category : 'customization' }
 TaskbarItemMorph >> addEmphaseTo: lab [
 	"1 -> bold"
@@ -267,14 +251,6 @@ TaskbarItemMorph >> startDrag: event [
 	transferMorph align: transferMorph center with: event position.
 	event hand grabMorph: transferMorph.
 	event hand releaseMouseFocus: self
-]
-
-{ #category : 'drag and drop' }
-TaskbarItemMorph >> wantsDroppedMorph: aMorph event: event [
-	"Accept drops only from TransferMorph carrying a TaskbarTask."
-
-	(aMorph isKindOf: TransferMorph) ifFalse: [ ^ false ].
-	^ aMorph passenger isKindOf: TaskbarTask
 ]
 
 { #category : 'menu' }
