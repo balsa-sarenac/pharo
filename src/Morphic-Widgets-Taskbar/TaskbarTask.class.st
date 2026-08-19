@@ -25,6 +25,11 @@ TaskbarTask class >> morph: aMorph state: aSymbol icon: aForm label: aString [
 		label: aString
 ]
 
+{ #category : 'drag and drop' }
+TaskbarTask >> asDraggableMorph [
+	^ StringMorph contents: self label
+]
+
 { #category : 'comparing' }
 TaskbarTask >> = aTaskbarTask [
 	"Answer whether equal."
