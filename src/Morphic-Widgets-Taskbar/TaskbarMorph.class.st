@@ -505,7 +505,7 @@ TaskbarMorph >> updateTaskButtons [
 	"Make buttons for the ordered tasks."
 
 	| oldButtons size |
-	oldButtons := self submorphs copy.
+	oldButtons := self submorphs reject: [ :m | m = dropIndicator ].
 	self removeAllMorphs.
 	self defer: [ oldButtons do: [ :b | b model: nil ] ]. "release dependency after event handling"
 
