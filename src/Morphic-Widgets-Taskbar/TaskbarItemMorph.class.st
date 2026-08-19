@@ -35,7 +35,7 @@ TaskbarItemMorph >> buildLabelMorph [
 	^ self theme buttonLabelForText: self model taskbarLabel
 ]
 
-{ #category : 'drag and drop' }
+{ #category : 'event handling' }
 TaskbarItemMorph >> click: event [
 	"The user clicked (short press) on this button. Activate or minimize the window."
 
@@ -88,6 +88,7 @@ TaskbarItemMorph >> initializeFor: aTaskbar [
 		hResizing: #rigid;
 		vResizing: #rigid;
 		useSquareCorners;
+		dropEnabled: true;
 		getMenuSelector: #taskbarButtonMenu:.
 		
 	"The following code works like this:
@@ -104,7 +105,7 @@ TaskbarItemMorph >> initializeFor: aTaskbar [
 				ifFalse: [ self theme taskbarItemLabelColorForExpanded: self ])
 ]
 
-{ #category : 'drag and drop' }
+{ #category : 'event handling' }
 TaskbarItemMorph >> mouseDown: event [
 	"Set up click-or-drag handling. A short click activates the window;
 	a drag beyond the threshold initiates task reordering."
@@ -117,26 +118,21 @@ TaskbarItemMorph >> mouseDown: event [
 		threshold: 5
 ]
 
-{ #category : 'drag and drop' }
+{ #category : 'event handling' }
 TaskbarItemMorph >> mouseEnterDragging: event [
 	"The hand is dragging a morph over us. Show a drop indicator bar."
 
-	| taskbar draggedTask myTask idx x |
+	| taskbar taskIndex |
+	(event hand hasSubmorphs and: [ self dropEnabled ]) ifFalse: [ ^ super mouseEnterDragging: event ].
+
 	taskbar := self owner.
-	(taskbar isKindOf: TaskbarMorph) ifFalse: [ ^ self ].
-	draggedTask := event hand submorphs
-		ifEmpty: [ ^ self ]
-		ifNotEmpty: [ :morphs | morphs first passenger ].
-	(draggedTask isKindOf: TaskbarTask) ifFalse: [ ^ self ].
-	myTask := self model taskbarTask.
-	myTask ifNil: [ ^ self ].
-	draggedTask = myTask ifTrue: [ ^ self ].
-	idx := taskbar submorphIndexOf: self.
-	idx ifNil: [ ^ self ].
-	x := event position x - self fullBounds left.
-	x < (self width / 2)
-		ifTrue: [ taskbar showDropIndicatorAfterIndex: idx - 1 ]
-		ifFalse: [ taskbar showDropIndicatorAfterIndex: idx ]
+
+	taskIndex := (taskbar submorphIndexOf: self) ifNil: [ ^ self ]. "In case we close the task really close to the time we move it?"
+
+	"We check that the x position of the morph is before or after half my width to know which index to use."
+	taskbar showDropIndicatorAfterIndex: (event position x - self fullBounds left < (self width / 2)
+			 ifTrue: [ taskIndex - 1 ]
+			 ifFalse: [ taskIndex ]) 
 ]
 
 { #category : 'style - border' }
@@ -242,15 +238,14 @@ TaskbarItemMorph >> startDrag: event [
 	"Initiate a drag operation. Create a TransferMorph carrying the TaskbarTask."
 
 	| taskbar task transferMorph |
-	taskbar := self owner.
-	taskbar ifNil: [ ^ self ].
-	(taskbar isKindOf: TaskbarMorph) ifFalse: [ ^ self ].
+	taskbar := self owner ifNil: [ ^ self ].
 	task := taskbar taskOf: self model.
 	task ifNil: [ ^ self ].
-	transferMorph := TransferMorph withPassenger: task from: self.
+	transferMorph := self model transferFor: task from: self.
 	transferMorph align: transferMorph center with: event position.
-	event hand grabMorph: transferMorph.
-	event hand releaseMouseFocus: self
+	event hand
+		grabMorph: transferMorph;
+		releaseMouseFocus: self
 ]
 
 { #category : 'menu' }

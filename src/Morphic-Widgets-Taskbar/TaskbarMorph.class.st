@@ -141,17 +141,17 @@ TaskbarMorph >> displayExtentChanged [
 ]
 
 { #category : 'drag and drop' }
-TaskbarMorph >> dropIndicatorIndexForX: mouseX [
+TaskbarMorph >> dropIndicatorIndexForX: xPosition [
 	"Answer the submorph index before which to place the drop indicator,
 	based on mouseX compared to button positions. Ignores y-position."
 
 	| buttons |
-	buttons := self submorphs reject: [ :m | m = dropIndicator ].
+	buttons := self submorphs reject: [ :morph | morph = dropIndicator ].
+
 	buttons ifEmpty: [ ^ 1 ].
-	buttons doWithIndex: [ :btn :i |
-		| center |
-		center := btn center x.
-		mouseX < center ifTrue: [ ^ i ] ].
+
+	buttons doWithIndex: [ :button :index | xPosition < button center x ifTrue: [ ^ index ] ].
+
 	^ buttons size + 1
 ]
 
@@ -302,16 +302,22 @@ TaskbarMorph >> moveTask: aTask toIndex: targetIndex [
 
 	| currentIndex newOrderedTasks adjustedIndex |
 	currentIndex := self orderedTasks indexOf: aTask.
-	currentIndex = 0 ifTrue: [ ^ self ].
-	currentIndex = targetIndex ifTrue: [ ^ self ].
+
+	(currentIndex = 0 or: [ currentIndex = targetIndex ]) ifTrue: [ ^ self ].
+
 	newOrderedTasks := self orderedTasks copy.
+
 	newOrderedTasks removeAt: currentIndex.
+
 	adjustedIndex := targetIndex > currentIndex
-		ifTrue: [ targetIndex - 1 ]
-		ifFalse: [ targetIndex ].
+		                 ifTrue: [ targetIndex - 1 ]
+		                 ifFalse: [ targetIndex ].
+
 	newOrderedTasks add: aTask beforeIndex: (adjustedIndex clampBetween: 1 and: newOrderedTasks size + 1).
-	self orderedTasks: newOrderedTasks.
-	self updateTaskButtons
+
+	self
+		orderedTasks: newOrderedTasks;
+		updateTaskButtons
 ]
 
 { #category : 'accessing' }
@@ -378,13 +384,13 @@ TaskbarMorph >> removeFromWorld [
 TaskbarMorph >> showDropIndicatorAfterIndex: anInteger [
 	"Show a thin vertical bar after the button at the given submorph index."
 
-	| btnHeight |
+	| buttonHeight |
 	self removeDropIndicator.
 	self submorphs ifEmpty: [ ^ self ].
-	btnHeight := self submorphs first height.
+	buttonHeight := self submorphs first height.
 	dropIndicator := Morph new
 		                 color: (self theme taskbarItemLabelColorForExpanded: self);
-		                 extent: 4 @ btnHeight;
+		                 extent: 4 @ buttonHeight;
 		                 yourself.
 	dropTargetIndex := anInteger + 1.
 	self addMorph: dropIndicator asElementNumber: dropTargetIndex
@@ -395,41 +401,34 @@ TaskbarMorph >> showWindowPreview [
 	^ self class showWindowPreview
 ]
 
-{ #category : 'drag and drop' }
+{ #category : 'stepping and presenter' }
 TaskbarMorph >> step [
-	"If the hand is dragging a TaskbarTask, update the drop indicator
-	from the mouse x-position regardless of y.
-	When the drag ends, perform the move."
+	"If the hand is dragging a TaskbarTask, update the drop indicator.	When the drag ends, perform the move. We do not do it by overriding a drop event handling of the taskbar because we want to still apply the moving of the task if it's in the world above the bar."
 
-	| hand isDragging task idx |
-	self world ifNil: [ ^ self ].
-	hand := self world activeHand.
-	hand ifNil: [ ^ self ].
-	task := nil.
-	isDragging := hand submorphs anySatisfy: [ :sms |
-		(sms isKindOf: TransferMorph) and: [
-			(sms passenger isKindOf: TaskbarTask)
-				ifTrue: [ task := sms passenger. true ]
-				ifFalse: [ false ] ]].
+	| hand isDragging task indicatorIndex |
+	hand := self world activeHand ifNil: [ ^ self ].
+	isDragging := hand submorphs anySatisfy: [ :submorph |
+			              (submorph passenger isKindOf: TaskbarTask)
+				              ifTrue: [
+						              task := submorph passenger.
+						              true ]
+				              ifFalse: [ false ] ].
 	isDragging ifFalse: [
-		(dropIndicator notNil and: [ lastDraggedTask notNil and: [ dropTargetIndex notNil ] ])
-			ifTrue: [
-				| idx |
-				idx := dropTargetIndex.
-				self removeDropIndicator.
-				self moveTask: lastDraggedTask toIndex: idx ]
-			ifFalse: [
-				self removeDropIndicator ].
-		lastDraggedTask := nil.
-		^ self ].
+			| targetIndex |
+			targetIndex := dropTargetIndex.
+			self removeDropIndicator.
+			(lastDraggedTask isNotNil and: [ targetIndex isNotNil ]) ifTrue: [ self moveTask: lastDraggedTask toIndex: targetIndex ].
+			lastDraggedTask := nil.
+			^ self ].
+
 	self submorphs ifEmpty: [ ^ self ].
 	lastDraggedTask := task.
-	idx := self dropIndicatorIndexForX: hand cursorPoint x.
-	idx = dropTargetIndex ifTrue: [ ^ self ].
-	self showDropIndicatorAfterIndex: idx - 1
+	indicatorIndex := self dropIndicatorIndexForX: hand cursorPoint x.
+	indicatorIndex = dropTargetIndex ifTrue: [ ^ self ].
+	self showDropIndicatorAfterIndex: indicatorIndex - 1
 ]
 
-{ #category : 'geometry' }
+{ #category : 'stepping and presenter' }
 TaskbarMorph >> stepTime [
 	^ 50
 ]
@@ -505,7 +504,7 @@ TaskbarMorph >> updateTaskButtons [
 	"Make buttons for the ordered tasks."
 
 	| oldButtons size |
-	oldButtons := self submorphs reject: [ :m | m = dropIndicator ].
+	oldButtons := self submorphs reject: [ :morph | morph = dropIndicator ].
 	self removeAllMorphs.
 	self defer: [ oldButtons do: [ :b | b model: nil ] ]. "release dependency after event handling"
 
