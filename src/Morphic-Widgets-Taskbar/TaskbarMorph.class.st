@@ -7,7 +7,9 @@ Class {
 	#superclass : 'Morph',
 	#instVars : [
 		'tasks',
-		'orderedTasks'
+		'orderedTasks',
+		'dropIndicator',
+		'dropTargetIndex'
 	],
 	#classVars : [
 		'MaximumButtons',
@@ -282,15 +284,18 @@ TaskbarMorph >> move: task withOffset: offset [
 TaskbarMorph >> moveTask: aTask toIndex: targetIndex [
 	"Move aTask to the given index in orderedTasks. Used by drag-and-drop."
 
-	| currentIndex newOrderedTasks |
+	| currentIndex newOrderedTasks adjustedIndex |
 	currentIndex := self orderedTasks indexOf: aTask.
 	currentIndex = 0 ifTrue: [ ^ self ].
 	currentIndex = targetIndex ifTrue: [ ^ self ].
 	newOrderedTasks := self orderedTasks copy.
 	newOrderedTasks removeAt: currentIndex.
-	newOrderedTasks add: aTask beforeIndex: (targetIndex min: newOrderedTasks size + 1).
+	adjustedIndex := targetIndex > currentIndex
+		ifTrue: [ targetIndex - 1 ]
+		ifFalse: [ targetIndex ].
+	newOrderedTasks add: aTask beforeIndex: (adjustedIndex clampBetween: 1 and: newOrderedTasks size + 1).
 	self orderedTasks: newOrderedTasks.
-	self resetDropIndicator.
+	self removeDropIndicator.
 	self updateTaskButtons
 ]
 
@@ -330,10 +335,33 @@ TaskbarMorph >> rejectsEvent: anEvent [
 ]
 
 { #category : 'drag and drop' }
-TaskbarMorph >> resetDropIndicator [
-	"Remove drop highlight from all task buttons."
+TaskbarMorph >> dropTargetIndex [
+	^ dropTargetIndex
+]
 
-	self submorphs do: [ :m | m resetHighlightForDrop ]
+{ #category : 'drag and drop' }
+TaskbarMorph >> removeDropIndicator [
+	"Remove the drop indicator bar."
+
+	dropIndicator ifNotNil: [ :ind | ind delete ].
+	dropIndicator := nil.
+	dropTargetIndex := nil
+]
+
+{ #category : 'drag and drop' }
+TaskbarMorph >> showDropIndicatorAfterIndex: anInteger [
+	"Show a thin vertical bar after the button at the given submorph index."
+
+	| btnHeight |
+	self removeDropIndicator.
+	self submorphs ifEmpty: [ ^ self ].
+	btnHeight := self submorphs first height.
+	dropIndicator := Morph new
+		color: Color blue;
+		extent: 4 @ btnHeight;
+		yourself.
+	dropTargetIndex := anInteger + 1.
+	self addMorph: dropIndicator asElementNumber: dropTargetIndex
 ]
 
 { #category : 'taskbar' }
@@ -428,6 +456,7 @@ TaskbarMorph >> updateTaskButtons [
 	"Make buttons for the ordered tasks."
 
 	| oldButtons size |
+	self removeDropIndicator.
 	oldButtons := self submorphs copy.
 	self removeAllMorphs.
 	self defer: [ oldButtons do: [ :b | b model: nil ] ]. "release dependency after event handling"

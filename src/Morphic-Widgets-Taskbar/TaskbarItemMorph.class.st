@@ -22,20 +22,17 @@ Class {
 
 { #category : 'drag and drop' }
 TaskbarItemMorph >> acceptDroppingMorph: aTransferMorph event: event [
-	"The user dropped a task onto this button. Reorder the taskbar."
+	"The user dropped a task. Move it to the indicator position."
 
-	| droppedTask targetIndex taskbar currentIndex |
-	droppedTask := aTransferMorph passenger.
-	droppedTask ifNil: [ ^ self ].
+	| taskbar droppedTask targetIdx |
 	taskbar := self owner.
 	taskbar ifNil: [ ^ self ].
 	(taskbar isKindOf: TaskbarMorph) ifFalse: [ ^ self ].
-	currentIndex := taskbar orderedTasks indexOf: droppedTask.
-	currentIndex = 0 ifTrue: [ ^ self ].
-	targetIndex := taskbar orderedTasks
-		indexOf: self model taskbarTask
-		ifAbsent: [ ^ self ].
-	taskbar moveTask: droppedTask toIndex: targetIndex.
+	droppedTask := aTransferMorph passenger.
+	droppedTask ifNil: [ ^ self ].
+	targetIdx := taskbar dropTargetIndex.
+	targetIdx ifNil: [ ^ self ].
+	taskbar moveTask: droppedTask toIndex: targetIdx.
 	event hand releaseMouseFocus: self
 ]
 
@@ -138,9 +135,9 @@ TaskbarItemMorph >> mouseDown: event [
 
 { #category : 'drag and drop' }
 TaskbarItemMorph >> mouseEnterDragging: event [
-	"The hand is dragging a morph over us. Highlight as potential drop target."
+	"The hand is dragging a morph over us. Show a drop indicator bar."
 
-	| taskbar draggedTask myTask |
+	| taskbar draggedTask myTask idx x |
 	taskbar := self owner.
 	(taskbar isKindOf: TaskbarMorph) ifFalse: [ ^ self ].
 	draggedTask := event hand submorphs
@@ -150,14 +147,21 @@ TaskbarItemMorph >> mouseEnterDragging: event [
 	myTask := self model taskbarTask.
 	myTask ifNil: [ ^ self ].
 	draggedTask = myTask ifTrue: [ ^ self ].
-	self highlightForDrop: true
+	idx := taskbar submorphIndexOf: self.
+	idx ifNil: [ ^ self ].
+	x := event position x - self fullBounds left.
+	x < (self width / 2)
+		ifTrue: [ taskbar showDropIndicatorAfterIndex: idx - 1 ]
+		ifFalse: [ taskbar showDropIndicatorAfterIndex: idx ]
 ]
 
 { #category : 'drag and drop' }
 TaskbarItemMorph >> mouseLeaveDragging: event [
-	"The hand left us while dragging. Remove drop highlight."
+	"The hand left us while dragging. Remove drop indicator."
 
-	self resetHighlightForDrop
+	| taskbar |
+	taskbar := self owner.
+	(taskbar isKindOf: TaskbarMorph) ifTrue: [ taskbar removeDropIndicator ]
 ]
 
 { #category : 'style - border' }
