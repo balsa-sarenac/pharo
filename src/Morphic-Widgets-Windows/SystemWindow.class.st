@@ -29,6 +29,7 @@ Class {
 	#classVars : [
 		'CloseBoxImage',
 		'CollapseBoxImage',
+		'CurrentCloseSource',
 		'FullscreenMargin',
 		'TopWindow',
 		'UseHideForClose'
@@ -303,6 +304,12 @@ SystemWindow class >> collapseBoxImage [
 	offset: 0@0)]
 ]
 
+{ #category : 'class initialization' }
+SystemWindow class >> currentCloseSource [
+
+	^ CurrentCloseSource ifNil: [ nil ]
+]
+
 { #category : 'accessing' }
 SystemWindow class >> expandBoxImage [
 
@@ -388,6 +395,12 @@ SystemWindow class >> sendTopWindowToBack [
 	self currentWorld submorphs
 		detect: [ :morph | morph isSystemWindow ]
 		ifFound: [ :morph | morph sendToBack ]
+]
+
+{ #category : 'initialization' }
+SystemWindow class >> setCurrentCloseSource: aSymbol [
+
+	CurrentCloseSource := aSymbol
 ]
 
 { #category : 'menu items - tiling' }
@@ -1164,8 +1177,9 @@ SystemWindow >> closeBoxHit [
 	For Mac users only, the Mac convention of option-click-on-close-box is obeyed if the mac option key is down.
 	If we have a modal child then don't delete."
 
-	self allowedToClose ifFalse: [^self].
-	self close
+	self allowedToClose ifFalse: [ ^ self ].
+	self class setCurrentCloseSource: #closeButton.
+	[ self close ] ensure: [ self class setCurrentCloseSource: nil ]
 ]
 
 { #category : 'keymapping' }

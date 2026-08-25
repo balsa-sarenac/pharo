@@ -56,7 +56,7 @@ ClyShowLocalImplementorsCommand >> execute [
 	query := ClyMessageImplementorsQuery ofAny: selectors from: self createQueryScope.
 	scopedMethods := query execute.
 
-	(Smalltalk tools toolNamed: #messageList) browse: scopedMethods items title: self defaultMenuItemName from: nil  
+	(Smalltalk tools toolNamed: #messageList) browse: scopedMethods items
 ]
 
 { #category : 'execution' }
