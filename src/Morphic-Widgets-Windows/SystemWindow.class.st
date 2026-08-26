@@ -24,12 +24,12 @@ Class {
 		'expandBox',
 		'embeddable',
 		'isResizeable',
-		'taskbarTask'
+		'taskbarTask',
+		'wasClosedFromShortcut'
 	],
 	#classVars : [
 		'CloseBoxImage',
 		'CollapseBoxImage',
-		'CurrentCloseSource',
 		'FullscreenMargin',
 		'TopWindow',
 		'UseHideForClose'
@@ -304,12 +304,6 @@ SystemWindow class >> collapseBoxImage [
 	offset: 0@0)]
 ]
 
-{ #category : 'class initialization' }
-SystemWindow class >> currentCloseSource [
-
-	^ CurrentCloseSource ifNil: [ nil ]
-]
-
 { #category : 'accessing' }
 SystemWindow class >> expandBoxImage [
 
@@ -395,12 +389,6 @@ SystemWindow class >> sendTopWindowToBack [
 	self currentWorld submorphs
 		detect: [ :morph | morph isSystemWindow ]
 		ifFound: [ :morph | morph sendToBack ]
-]
-
-{ #category : 'initialization' }
-SystemWindow class >> setCurrentCloseSource: aSymbol [
-
-	CurrentCloseSource := aSymbol
 ]
 
 { #category : 'menu items - tiling' }
@@ -1178,8 +1166,8 @@ SystemWindow >> closeBoxHit [
 	If we have a modal child then don't delete."
 
 	self allowedToClose ifFalse: [ ^ self ].
-	self class setCurrentCloseSource: #closeButton.
-	[ self close ] ensure: [ self class setCurrentCloseSource: nil ]
+	self setWasClosedFromShortcut: false.
+	[ self close ] ensure: [ self setWasClosedFromShortcut: nil ]
 ]
 
 { #category : 'keymapping' }
@@ -2986,6 +2974,15 @@ SystemWindow >> setUpdatablePanesFrom: getSelectors [
 	updatablePanes := aList asArray
 ]
 
+{ #category : 'initialization' }
+SystemWindow >> setWasClosedFromShortcut: aBoolean [
+	"Records whether the close currently in progress was
+	triggered by a keyboard shortcut. Reset once the close completes
+	(see #closeBoxHit)."
+
+	wasClosedFromShortcut := aBoolean
+]
+
 { #category : 'menu actions' }
 SystemWindow >> setWindowColor [
 	"Allow the user to select a new basic color for the window"
@@ -3264,6 +3261,15 @@ SystemWindow >> wantsToBeDroppedInto: aMorph [
 SystemWindow >> wantsYellowButtonMenu [
 	"Answer true if the receiver wants a yellow button menu"
 	^ false
+]
+
+{ #category : 'accessing' }
+SystemWindow >> wasClosedFromShortcut [
+	"Answer whether the current (or most recent) close operation on this
+	window was triggered via a keyboard shortcut rather than
+	by clicking the close box."
+
+	^ wasClosedFromShortcut ifNil: [ true ]
 ]
 
 { #category : 'accessing' }
