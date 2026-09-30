@@ -80,5 +80,5 @@ SycAddMessageArgumentCommand >> prepareFullExecutionInContext: aToolContext [
 
 { #category : 'execution' }
 SycAddMessageArgumentCommand >> resultMessageSelector [
-	^newSelector
+	^ newSelector selector
 ]

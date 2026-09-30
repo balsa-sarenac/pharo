@@ -34,3 +34,8 @@ SycRemoveAllSendersCommand >> defaultMenuIconName [
 SycRemoveAllSendersCommand >> defaultMenuItemName [
 	^'Remove all senders'
 ]
+
+{ #category : 'execution' }
+SycRemoveAllSendersCommand >> resultMessageSelector [
+	^ originalMessage selector
+]

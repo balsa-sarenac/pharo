@@ -33,6 +33,11 @@ ClyMethodSourceCodeContext >> selectedMethods [
 ]
 
 { #category : 'tool controlling' }
+ClyMethodSourceCodeContext >> showClass: aClass [
+	self browser selectClass: aClass
+]
+
+{ #category : 'tool controlling' }
 ClyMethodSourceCodeContext >> showMessage: aMessageDescription renamedTo: newSelector [
 	"here we expect only messages which was created from ast-nodes"
 	tool editingMethod selector == aMessageDescription selector

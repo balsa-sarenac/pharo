@@ -13,6 +13,14 @@ SycInlineIntoLocalSendersMessageCommand class >> canBeExecutedInContext: aToolCo
 	^ aToolContext isMethodSelected
 ]
 
+{ #category : 'execution' }
+SycInlineIntoLocalSendersMessageCommand >> applyResultInContext: aToolContext [
+	| methodOrigin |
+	methodOrigin := originalMessage contextUser compiledMethod origin.
+	(methodOrigin includesSelector: originalMessage selector) ifFalse: [
+		aToolContext showClass: methodOrigin ]
+]
+
 { #category : 'accessing' }
 SycInlineIntoLocalSendersMessageCommand >> defaultMenuIconName [
 	^#smallRightFlush
